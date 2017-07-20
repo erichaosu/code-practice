@@ -12,7 +12,6 @@
                 "-std=c++0x",
                 "${workspaceRoot}/src/practice.cpp"
             ],
-            "cwd": "${workspaceRoot}",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -29,8 +28,8 @@
                 "severity": 4,
                 "message": 5
             }
-        }
-            ]
+            }
+            
         }
     ]
 }
