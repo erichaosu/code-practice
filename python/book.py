@@ -1,0 +1,11 @@
+from fib import fib, fib2
+userInput = input("Enter a number: ")
+print("Your original input: " + userInput)
+userInputAsFloat = float(userInput)
+print("Your input as a float:", userInputAsFloat)
+userInputAsInt = int(userInput)
+print("Your input as an integer:", userInputAsInt)
+print("give a range to get fibonacci number")  
+n = input()
+fib(int(n))
+#print (rel)

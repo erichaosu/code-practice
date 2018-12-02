@@ -19,7 +19,11 @@
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
-            }
+            },
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
+            ]
         },
         {
             "name": "Linux",
@@ -50,6 +54,7 @@
                 "_DEBUG",
                 "UNICODE"
             ],
+            "compilerPath": "C:\\MinGW\\bin\\gcc.exe",
             "intelliSenseMode": "msvc-x64",
             "browse": {
                 "path": [
@@ -61,5 +66,5 @@
             }
         }
     ],
-    "version": 2
+    "version": 4
 }
