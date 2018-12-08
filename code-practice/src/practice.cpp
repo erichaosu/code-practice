@@ -110,6 +110,33 @@ int extractUniqueChar(string s){
     return 0;
     
 }
+// remove a value from a array inplace, return new length
+int rmElement(int array[], int n, int num)
+{
+    int i;
+    int j = 0;
+    for (i = 0; i < n; i++) {
+        if (num == array[i]) {
+            continue;
+        }
+        array[j] = array[i];
+        j ++; 
+    }
+    return j;
+}
+//remove duplicate element of a array
+int rmDuplicate(int array[], int n)
+{
+    int i;
+    int j = 0;
+    for (i = 1; i < n; i ++) {
+        if (array[j] != array[i]){
+            array[++j] = array[i];
+        } 
+    }
+    return j +1;
+}
+
 
 int main() {
     // twosum one-pass hash lkup solution
@@ -117,6 +144,8 @@ int main() {
     vector<int> testVector;
     solution sol;
     testVector ={8,7,6,5,4,3,2,1};
+    int array[] = {1,2,2,3,4};
+    cout<<"new array size " << rmDuplicate(array, sizeof(array)/sizeof(array[0]))<< endl;
     vec = sol.twoSum(testVector, 9);
     cout<<"sum of {" <<vec[0]<<","<<vec[1]<<"}"<<endl;
 
