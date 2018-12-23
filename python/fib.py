@@ -18,6 +18,18 @@ def fib2(n):
         a,b = b, a+b
     return result
 
+def sum_naturals(n):
+    """Return the sum of the first n natural numbers
+    >>> sum_naturals(10)
+    55
+    >>> sum_naturals(100)
+    5051
+    """
+    total, k = 0, 1
+    while k <= n:
+        total, k = total + k, k + 1
+    return total
+
 if __name__ == "__main__":
     import sys
     print ("print something {0} {1}".format(sys.argv[0], sys.argv[1]))

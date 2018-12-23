@@ -9,9 +9,17 @@
 #include <iostream>
 #include <unordered_map>
 #include <vector>
-#include <string>
 #include <list>
 #include "../include/practice.h"
+
+
+class solution{
+
+public:
+    std::vector<int> twoSum(std::vector<int>& nums, int target);
+    bool isUnique(const std::string &str);
+};
+typedef solution* solutionPtr;
 
 using namespace std;
 // find any two number sum which equal to target
@@ -139,6 +147,21 @@ int rmDuplicate(int array[], int n)
 
 
 int main() {
+    
+    // add two students to a linklist
+    
+    LinkList<student>* class18 = new LinkList<student>();
+    
+    student* s1 = new student();
+    student* s2 = new student();
+    s1->name = "Tom Cruze";
+    s1->age = 19;
+    s2->name = "Mary Cruze";
+    s2->age = 18;
+    class18->push_front(s1);
+    class18->push_front(s2);
+    class18->display();
+
     // twosum one-pass hash lkup solution
     vector<int> vec;
     vector<int> testVector;
@@ -150,7 +173,7 @@ int main() {
     cout<<"sum of {" <<vec[0]<<","<<vec[1]<<"}"<<endl;
 
     //check if string is unique
-    string str = "banana";
+    string str = "banana ";
     cout<< str<<"is "<<(isUnique(str)?"unique":"not unique")<<endl;
      
 }

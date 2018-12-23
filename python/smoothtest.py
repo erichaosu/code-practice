@@ -65,6 +65,6 @@ if __name__ == '__main__':
     img2 = smooth_img(img, w, h)
     end_time1 = time.time()
     print ("smooth take  {0:d} seconds".format (int(end_time1-start_time)))
-    img2.save('C://Users/haosu/pyimg.png')
+    img2.save('pyimg.png')
     end_time2 = time.time()
     print ("save image file take  {0:2.2f} seconds" .format((end_time2-end_time1)))

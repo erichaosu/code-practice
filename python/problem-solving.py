@@ -18,6 +18,10 @@ def reverse(num):
 
 #find unique num in a list O(n) = nxn
 def find_unique(num):
+    """ find unique number in a list
+    num: a number 
+    O(n) is nxn 
+    """
     result = []
     if len(num) == 1:
         result.append(num[0])
