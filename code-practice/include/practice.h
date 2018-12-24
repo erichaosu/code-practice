@@ -11,13 +11,17 @@ public:
     ~student(){};
     void display();
 };
+void student::display()
+{
+    cout<<"student name: "<<this->name <<"  age: "<<this->age<<std::endl;
+}
 
 template <class T>
 class LinkList{
 public:
     struct Node
     {
-        Node(T* x):data(x){}
+        Node(T* x, Node* y = 0):data(x), next(y){}
         T* data;
         Node* next;
     };
@@ -29,7 +33,11 @@ public:
     LinkList();
     ~LinkList();
     void push_front(T* x);
+    void add_tail(T* x);
     void delete_front(T* x);
+    void delete_front();
+    void delete_list();
+    void reverseList();
     void display();
 };
 template<class T>
@@ -60,30 +68,42 @@ void LinkList<T>::push_front(T* x)
         node->next = this->head;
         this->head = node;  
     }
+    this->length ++;
 }
-/*    
-void LinkList::addNode_tail(void* data)
+template <class T>
+void LinkList<T>::add_tail(T* x)
 {
-    Node* node = new Node();
-    node->data = data;
+    Node* node = new Node(x);
     //empty list
     if (this->tail == NULL){
         this->head = this->current = this->tail = node;
         node->next = NULL;
     } else {
+        this->tail->next = node;
         this->tail = node;
         node->next = NULL;
     }
-}*/
+    this->length ++;
+}
 
 //del node with matching data value
 template<class T>
-void LinkList<T>::delete_front(T* x)
+void LinkList<T>::delete_front()
 {
+    Node* node;
     if (this->head != NULL){
-        
+        node = this->head;
+        this->head = node->next;
+        delete (node);
+        this->length --;
     }
-
+}
+template <class T>
+void LinkList<T>::delete_list()
+{
+    while (this->head != NULL){
+        delete_front();
+    }
 }
 template<class T>
 void LinkList<T>::display()
@@ -92,11 +112,25 @@ void LinkList<T>::display()
     if(node == NULL){
         cout<<"This is empty linkedlist"<<endl;
     }else{
+        cout <<"There is "<<this->length << " nodes on linklist" <<endl;
         while (node != NULL){
             node->data->display();
             node = node->next;
         }
     }
 }
-
+template <class T>
+void LinkList<T>::reverseList()
+{
+    Node* node1 = this->head;
+    Node* node2 = NULL;
+    this->tail = node1;
+    while(this->head != NULL){
+        node1 = this->head;
+        this->head = this->head->next;
+        node1->next = node2;
+        node2 = node1;
+    }
+    this->head = node1;
+}
 #endif

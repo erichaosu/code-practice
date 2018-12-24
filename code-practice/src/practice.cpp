@@ -37,13 +37,15 @@ vector<int> solution::twoSum(vector<int>& nums, int target) {
         if (compliment > 0 && it != lookupMap->end() ){
             //create vector with two member, number and it compliment
             v = {nums[i], compliment};
+            delete lookupMap;
             return v;
         }else {
             //
             lookupMap->insert({nums[i],i});
         }
     }
-    v = {0,0}; 
+    v = {0,0};
+    delete lookupMap; 
     return  v;      
 }
 //check if all chaaracter in string is unique
@@ -154,14 +156,27 @@ int main() {
     
     student* s1 = new student();
     student* s2 = new student();
+    student* s3 = new student();
     s1->name = "Tom Cruze";
     s1->age = 19;
     s2->name = "Mary Cruze";
     s2->age = 18;
+    s3->name = "kevin Durrant";
+    s3->age = 17;
     class18->push_front(s1);
-    class18->push_front(s2);
+    class18->add_tail(s2);
     class18->display();
-
+    class18->add_tail(s3);
+    class18->display();
+    class18->reverseList();
+    class18->display();
+    class18->delete_list();
+    class18->display();
+    
+    delete s1;
+    delete s2;
+    delete s3;
+    delete class18;
     // twosum one-pass hash lkup solution
     vector<int> vec;
     vector<int> testVector;
