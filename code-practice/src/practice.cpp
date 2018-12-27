@@ -177,6 +177,101 @@ int main() {
     delete s2;
     delete s3;
     delete class18;
+    cout<<endl;
+    // queue test
+    Queue<student>* class19 = new Queue<student>();
+    
+    s1 = new student();
+    s2 = new student();
+    s3 = new student();
+    student* s;
+    s1->name = "Tom Cruze";
+    s1->age = 19;
+    s2->name = "Mary Cruze";
+    s2->age = 18;
+    s3->name = "kevin Durrant";
+    s3->age = 17;
+    class19->enqueue(s1);
+    class19->enqueue(s2);
+    class19->enqueue(s3);
+    class19->display();
+    s = class19->dequeue();
+    cout << "dequeue  ";
+    s->display();
+    class19->display();
+    s = class19->dequeue();
+    cout << "dequeue  ";
+    s->display();
+    class19->display();
+    s = class19->dequeue();
+    cout << "dequeue  ";
+    s->display();
+    class19->display();
+    delete s1;
+    delete s2;
+    delete s3;
+    delete class19;
+    cout<<endl;
+    //stack inherit queue
+    Stack<student>* class20 = new Stack<student>();
+    s1 = new student();
+    s2 = new student();
+    s3 = new student();
+    s1->name = "Tom Cruze";
+    s1->age = 19;
+    s2->name = "Mary Cruze";
+    s2->age = 18;
+    s3->name = "kevin Durrant";
+    s3->age = 17;
+    class20->push(s1);
+    class20->push(s2);
+    class20->push(s3);
+    class20->display();
+    cout << "pop  ";
+    s = class20->pop();
+    s->display();
+    cout << "pop  ";
+    s = class20->pop();
+    s->display();
+    cout << "pop  ";
+    s = class20->pop();
+    s->display();
+    class20->display();
+    delete s1;
+    delete s2;
+    delete s3;
+    delete class20;
+
+    // binary tree
+    Tree<student>* class21 = new Tree<student>();
+    s1 = new student();
+    s2 = new student();
+    s3 = new student();
+    student* s4 = new student();
+    student* s5 = new student();
+    s1->name = "Tom Cruze";
+    s1->age = 18;
+    s2->name = "Mary Cruze";
+    s2->age = 19;
+    s3->name = "kevin Durrant";
+    s3->age = 17;
+    s4->name = "stephen Cury";
+    s4->age = 16;
+    s5->name = "dremon green";
+    s5->age = 20;
+    class21->addNode(s1);
+    class21->addNode(s2);
+    class21->addNode(s3);
+    class21->addNode(s4);
+    class21->addNode(s5);
+    class21->display(class21->root);
+    cout<<"number of students = "<<class21->nodeCount(class21->root)<<endl;
+    cout<<"find node ";
+    class21->searchNode(class21->root, s5);
+
+
+
+#if 0
     // twosum one-pass hash lkup solution
     vector<int> vec;
     vector<int> testVector;
@@ -190,5 +285,5 @@ int main() {
     //check if string is unique
     string str = "banana ";
     cout<< str<<"is "<<(isUnique(str)?"unique":"not unique")<<endl;
-     
+#endif     
 }
