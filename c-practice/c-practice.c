@@ -6,6 +6,7 @@
 #include <assert.h>
 #include <limits.h>
 #include "c-practice.h"
+#include <bits/stdint-uintn.h>
 
 //member functions of student
 int compareStudent(const student *s1, const student *s2)
@@ -536,8 +537,11 @@ int main()
     intersect();
 
     // get a integer array and remove odd member
-    getIntArray_removeOdd();
+    //getIntArray_removeOdd();
     // print max xor value of two given values
     printf("%d \n", maxXor(3,4));
+    char* chr = "hello";
+    reverse_str(chr);
+    printf(" reverse str = %s \n", chr);
     return 0;
 }

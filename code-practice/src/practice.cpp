@@ -11,17 +11,63 @@
 #include <vector>
 #include <list>
 #include "../include/practice.h"
-
+using namespace std;
 
 class solution{
 
 public:
     std::vector<int> twoSum(std::vector<int>& nums, int target);
     bool isUnique(const std::string &str);
+    bool isBigEndian();
+    int findOdd(vector<int>&x);
+    void swap(int &x, int &y);
+    void reverseStr(char *str);
+
 };
 typedef solution* solutionPtr;
+// reverse string
+void solution::reverseStr(char * str)
+{
+    const char* strPtr = str;
+    char tem;
+    int length = 0;
+    while (*strPtr != '\0'){
+        length ++;
+        strPtr ++ ;
+    }
+    if ((length == 0) || (length == 1)) return;
+    for (int i =0; i < length/2; i ++){
+        tem = str[i];
+        str[i] = str[length - i - 1];
+        str[length- i -1] = tem; 
+    }
+}
+// swap two number without using temporary number
+void solution::swap(int &x, int &y)
+{
+    x = x^y;
+    y = x^y;
+    x = x^y;
+}
+//check a number in a array that only odd occurance
+int solution::findOdd(vector<int>&x)
+{
+    int n = x.size();
+    int result;
+    for (int i=0;i < n; i++){
+        result ^= x[i];
+    }
+    return result;
+}
 
-using namespace std;
+//check if this computer is big endian
+bool solution::isBigEndian()
+{
+    uint32_t i = 12345678;
+    uint8_t *j= (uint8_t*)&i;
+    cout<<(*j-48)<<endl;
+    return (*j == 0);
+}
 // find any two number sum which equal to target
 vector<int> solution::twoSum(vector<int>& nums, int target) {
     int i;
@@ -268,10 +314,39 @@ int main() {
     cout<<"number of students = "<<class21->nodeCount(class21->root)<<endl;
     cout<<"find node ";
     class21->searchNode(class21->root, s5);
+    delete s1;
+    delete s2;
+    delete s3;
+    delete s4;
+    delete s5;
+    delete class21;
+    // hash table 
+    cout<<endl;
+    HashTable<student>* class22 = new HashTable<student>();
+    s1 = new student();
+    s1->name = "Tom Cruze";
+    s1->age = 18;
+    s2 = new student();
+    s2->name = "Mary Cruze";
+    s2->age = 19;
+    s3 = new student();
+    s3->name = "kevin Durrant";
+    s3->age = 17;
+    s4 = new student();
+    s4->name = "stephen Cury";
+    s4->age = 18;
+    class22->addEntry(s1);
+    class22->addEntry(s2);
+    class22->addEntry(s3);
+    class22->addEntry(s4);
+    class22->display();
+    class22->search(s4);
+    delete s1;
+    delete s2;
+    delete s3;
+    delete s4;
+    delete class22;
 
-
-
-#if 0
     // twosum one-pass hash lkup solution
     vector<int> vec;
     vector<int> testVector;
@@ -285,5 +360,25 @@ int main() {
     //check if string is unique
     string str = "banana ";
     cout<< str<<"is "<<(isUnique(str)?"unique":"not unique")<<endl;
-#endif     
+
+    //check if bigEndian
+    if (sol.isBigEndian()){
+        cout<<"this is big endian architecture"<<endl; 
+    }else {
+        cout<<"this is small endian architecture"<<endl;
+    }
+    // find odd occurance number in a array
+    vec={12,12,90,14,14,14,14};
+    cout<<"odd number is "<<sol.findOdd(vec)<<endl;
+    // swap two number without using temprary
+    int a = 10;
+    int b = 30;
+    cout<<"swap "<<a<<" and "<<b;
+    sol.swap(a, b);
+    cout<< "  = "<<a<<" "<<b<<endl;  
+    // reverse string
+    char *word = new (char);
+    snprintf(word, 6, "hello");
+    sol.reverseStr(word);
+    cout<<word<<endl;
 }

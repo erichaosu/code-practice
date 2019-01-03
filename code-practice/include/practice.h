@@ -1,6 +1,7 @@
 #ifndef PRACTICE_H
 #define PRACTICE_H
 #include <string>
+#include <vector>
 using namespace std;
 class student
 {
@@ -12,6 +13,8 @@ public:
     void display();
     bool compare (student* x);
     bool match(student* x, student* y){ return x->age == y->age; }
+    bool match2(student* x, student* y) { return x->name == y->name; }
+    int getValue(student* x){ return x->age; }
         
 };
 bool student::compare(student* x)
@@ -334,5 +337,109 @@ void Tree<T>::searchNode(Node* root, T* data)
         searchNode(root->left, data);
         searchNode(root->right, data);
     } 
+}
+
+// hash table implement using vector and linklist
+//hash entry is a linklist same hash value can have multiple results 
+//hash table is a vector hold many hash entries
+#define SIZE 21
+template<class T>
+class hashEntry : public LinkList<T>
+{
+public:
+    int key;
+    T* result;
+    hashEntry();
+    hashEntry(T* x);
+    ~hashEntry();
+    int build_key(T* x);
+};
+
+template<class T>
+hashEntry<T>::hashEntry()
+{
+    key = 0;
+    result = NULL;
+}
+template<class T>
+hashEntry<T>::hashEntry(T* x)
+{
+    this->key = build_key(x);
+    this->result = x;
+    this->add_tail(x);
+}
+template<class T>
+int hashEntry<T>::build_key(T* x)
+{
+    return x->getValue(x) % SIZE;
+}
+
+template<class T>
+class HashTable
+{
+public:
+    std::vector<hashEntry<T>*> hashTable;
+    HashTable();
+    ~HashTable();
+    void addEntry(T* x);
+    void display();
+    T* search(T* x);
+};
+template<class T>
+HashTable<T>::HashTable()
+{   
+    for (int n = 0; n< SIZE; n++){
+        hashTable.push_back(NULL);
+    }
+}
+
+template<class T>
+HashTable<T>::~HashTable()
+{   
+    hashTable.clear();
+}
+template<class T>
+void HashTable<T>::addEntry(T* x)
+{
+    hashEntry<T>* newEntry = new hashEntry<T>(x);
+    hashEntry<T>* oldEntry;
+    int index = newEntry->key;
+    if (hashTable[index] == NULL) {
+        hashTable[index] = newEntry;
+    }else {
+        oldEntry = hashTable[index];
+        oldEntry->add_tail(x);
+    }
+}
+template<class T>
+void HashTable<T>::display()
+{
+    int i = 0;
+    hashEntry<T>* entry;
+    while( i < SIZE){
+        if (this->hashTable[i] != NULL){
+            cout<<"entry  "<<i<<"    ";
+            entry = this->hashTable[i];
+            entry->LinkList<T>::display();
+        }
+        i++;
+    }
+}
+
+template<class T>
+T* HashTable<T>::search(T* x)
+{
+    hashEntry<T>* entry;
+    int index;
+    index = entry->build_key(x);
+    entry = this->hashTable[index];
+    while (entry->head != NULL){
+        if (entry->head->data->match2(entry->head->data, x)){
+            cout<<"found ";
+            entry->head->data->display(); 
+        }
+        entry->head = entry->head->next;
+    }
+
 }
 #endif
