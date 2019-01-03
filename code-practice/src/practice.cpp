@@ -22,10 +22,36 @@ public:
     int findOdd(vector<int>&x);
     void swap(int &x, int &y);
     void reverseStr(char *str);
-    void itoa(int num, )
+    void itoa(int num, char* str, int base);
 
 };
 typedef solution* solutionPtr;
+//itoa
+void solution::itoa(int num, char* str, int base)
+{
+    bool negative = false;
+    int i=0;
+    if (num ==0) {
+        str[i] = '0';
+        str[i++] = '\0';
+    }
+    if (num < 0){
+        negative = true;
+        num = -num;
+    }
+    while (num > 0){
+        int rem = num % base; 
+        str[i] = (rem > 9)? (rem -10)+ 'a':rem + '0';
+        i++;
+        num = num/base;
+    }
+    if (negative){
+        str[i++] = '-';
+    }
+    str[i] ='\0';
+    reverseStr(str);
+}
+
 // reverse string
 void solution::reverseStr(char * str)
 {
@@ -382,4 +408,9 @@ int main() {
     snprintf(word, 6, "hello");
     sol.reverseStr(word);
     cout<<word<<endl;
+    //itoa
+    int n = -77;
+    char str1[5];
+    sol.itoa(n, str1, 16);
+    cout<<str1<<endl;
 }
