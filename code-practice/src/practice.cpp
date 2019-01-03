@@ -22,6 +22,7 @@ public:
     int findOdd(vector<int>&x);
     void swap(int &x, int &y);
     void reverseStr(char *str);
+    void itoa(int num, )
 
 };
 typedef solution* solutionPtr;
