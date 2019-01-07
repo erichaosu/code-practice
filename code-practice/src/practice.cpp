@@ -1,18 +1,19 @@
 //============================================================================
-// Name        : praactice.cpp
+// Name        : practice.cpp
 // Author      : 
 // Version     :
 // Copyright   : Your copyright notice
 // Description : C++, Ansi-style
 //============================================================================
-
 #include <iostream>
 #include <unordered_map>
 #include <vector>
 #include <list>
+#include <memory>
 #include "../include/practice.h"
 using namespace std;
 
+singleton* singleton::instance = NULL;
 class solution{
 
 public:
@@ -26,6 +27,7 @@ public:
 
 };
 typedef solution* solutionPtr;
+
 //itoa
 void solution::itoa(int num, char* str, int base)
 {
@@ -76,7 +78,7 @@ void solution::swap(int &x, int &y)
     y = x^y;
     x = x^y;
 }
-//check a number in a array that only odd occurance
+//check a number in a array that only odd occurrence
 int solution::findOdd(vector<int>&x)
 {
     int n = x.size();
@@ -121,7 +123,7 @@ vector<int> solution::twoSum(vector<int>& nums, int target) {
     delete lookupMap; 
     return  v;      
 }
-//check if all chaaracter in string is unique
+//check if all character in string is unique
 bool isUnique(const string &str)
 {
     //
@@ -220,12 +222,15 @@ int rmDuplicate(int array[], int n)
     return j +1;
 }
 
-
+int sqr(int k)
+{
+return k*k;
+}
 int main() {
     
     // add two students to a linklist
     
-    LinkList<student>* class18 = new LinkList<student>();
+    unique_ptr<LinkList<student>> class18 (new LinkList<student>());
     
     student* s1 = new student();
     student* s2 = new student();
@@ -249,7 +254,6 @@ int main() {
     delete s1;
     delete s2;
     delete s3;
-    delete class18;
     cout<<endl;
     // queue test
     Queue<student>* class19 = new Queue<student>();
@@ -394,18 +398,19 @@ int main() {
     }else {
         cout<<"this is small endian architecture"<<endl;
     }
-    // find odd occurance number in a array
+    // find odd occurrence number in a array
     vec={12,12,90,14,14,14,14};
     cout<<"odd number is "<<sol.findOdd(vec)<<endl;
-    // swap two number without using temprary
+    // swap two number without using temporary
     int a = 10;
     int b = 30;
     cout<<"swap "<<a<<" and "<<b;
     sol.swap(a, b);
     cout<< "  = "<<a<<" "<<b<<endl;  
     // reverse string
-    char *word = new (char);
-    snprintf(word, 6, "hello");
+    //char *word = new (char);
+    //snprintf(word, 6, "hello");
+    char word[]="hello";
     sol.reverseStr(word);
     cout<<word<<endl;
     //itoa
@@ -413,4 +418,24 @@ int main() {
     char str1[5];
     sol.itoa(n, str1, 16);
     cout<<str1<<endl;
+    cout<<"end!"<<endl;
+    const int SIZE1 =10;
+
+    int new_array[sqr(SIZE1)*3];
+    cout<<sizeof(new_array)<<endl;
+    singleton* sin;
+    singleton* sin1;
+    singleton* sin2;
+
+    cout<<hex<<(uintptr_t)sin->getInstance()<<endl;
+    cout<<hex<<(uintptr_t)sin1->getInstance()<<endl;
+    cout<<hex<<(uintptr_t)sin2->getInstance()<<endl;
+    
+    unsigned int a1;
+    a1 = 7;
+    write_only_port port(&a1);
+    cout<<"a = "<<a1<<endl;
+    port &= 0x5;
+    cout<<"a = "<<a1<<endl;
+    exit(0);
 }

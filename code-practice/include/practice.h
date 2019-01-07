@@ -442,4 +442,43 @@ T* HashTable<T>::search(T* x)
     }
 
 }
+class singleton
+{
+private: 
+    static singleton* instance;
+public:
+    static  singleton* getInstance() {
+        if (instance == NULL){
+            instance = new singleton;
+        }
+        return instance;
+    }
+};
+
+class write_only_port
+{
+    unsigned shadow;
+    volatile unsigned int* address;
+public:
+    write_only_port(unsigned int*);
+    ~write_only_port(){}
+    void operator|=(unsigned);
+    void operator&=(unsigned);
+};
+write_only_port::write_only_port(unsigned int* portAddr)
+{
+    address = (unsigned*)portAddr;
+    shadow = *address;
+    //*address = 0;
+}
+void write_only_port::operator|=(unsigned val)
+{
+    shadow |= val;
+    *address = shadow;
+}
+void write_only_port::operator&=(unsigned val)
+{
+    shadow &= val;
+    *address = shadow;
+}
 #endif
