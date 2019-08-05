@@ -9,7 +9,10 @@
 #include <unordered_map>
 #include <vector>
 #include <list>
+#include <set>
 #include <memory>
+#include <iomanip>
+#include <float.h>
 #include "../include/practice.h"
 using namespace std;
 
@@ -226,8 +229,394 @@ int sqr(int k)
 {
 return k*k;
 }
-int main() {
+
+//nth fibnacci
+// solution 1
+int getNthFib(int n) {
+  // Write your code here.
+	if (n == 1){
+		return 0;
+	}
+	else if (n == 2){
+		return 1;
+	}
+	else {
+		return getNthFib(n-1)+ getNthFib(n-2);
+	}
+}
+// solution 2
+int getNthFib2(int n, std::unordered_map<int,int> cache)
+{    
+    if (cache.find(n) != cache.end()){
+        return cache[n];
+    }else {
+        cache[n] = getNthFib2(n-1, cache) + getNthFib2(n-2,cache);
+    }
+    return cache[n];
+	
+}
+// solution 3
+int getNthFib3(int n, std::vector<int> lasttwo)
+{
+    if(n == 1) return lasttwo[0];
+    if (n ==2) return lasttwo[1];
+    for(int i = 3; i <= n; i++){
+        int nextfib = lasttwo[0]+lasttwo[1];
+        lasttwo[0] =lasttwo[1];
+        lasttwo[1] =nextfib;
+    }
+    return lasttwo[1];
+}
+
+struct params{
+        int h;
+        int w;
+        int aRiverSize[1];
+};
+void printvector(vector<int>& vec)
+{
+    cout<<"{ ";
+    for (auto it = vec.begin(); it !=vec.end(); it++){
+        cout<<*it<<",";
+    }
+    cout<<" }"<<endl;
+}
+void getARiversize(vector<vector<int>> matrix, 
+                   vector<vector<bool>>& visitedNode,
+                   int i,
+                   int j, 
+                   params& aRiver)
+{
+    //riversize should be at least +1, mark this node as visited
+    aRiver.aRiverSize[0] ++;
+    visitedNode[i][j] = true;
+    //check upper node
+    if (((i-1) >= 0) && !visitedNode[i-1][j] 
+         && matrix[i-1][j]){    
+        //keep going until to end
+        getARiversize(matrix, visitedNode, i-1, j, aRiver);
+    }
+    //check left node
+    if (((j-1) >= 0) && !visitedNode[i][j-1] 
+        && matrix[i][j-1]){
+        //keep going until to end
+        getARiversize(matrix, visitedNode,i,j-1, aRiver);
+    }
+    //check right node
+   if (((j+1) < aRiver.w) && !visitedNode[i][j+1] 
+        && matrix[i][j+1]){
+        //keep going until to end
+        getARiversize(matrix, visitedNode,i,j+1, aRiver);
+    }
+    //check below node
+    if (((i+1) < aRiver.h) && !visitedNode[i+1][j] 
+         && matrix[i+1][j]){
+        //keep going until to end
+        getARiversize(matrix, visitedNode,i+1,j, aRiver);
+    }
+}
+void printVisitedNode(int h,int w, vector<vector<bool>>& visitedNode)
+{
+    for (int i=0; i<h; i++){
+        for(int j=0;j<w;j++){
+            cout<<visitedNode[i][j]<<",";
+        }
+        cout<<endl;
+    }
+}
+
+vector<int> riverSizes(vector<vector<int>> matrix)
+{   
+   
+    vector<int> allRiverSize;
+    params aRiver;
     
+    
+    //get matrix width and height
+    int h = matrix.size();
+    int w = matrix[0].size();
+    vector<vector<bool>> visitedNode(h, vector<bool>(w, false));
+    cout<<"height ="<<h<<" width ="<<w<<endl;
+    aRiver.h = h;
+    aRiver.w = w;
+    for (int i=0; i<h; i++){
+        for(int j=0;j<w;j++){
+            if ((matrix[i][j] == 1) && (!visitedNode[i][j])){      
+                aRiver.aRiverSize[0] =0;
+                getARiversize(matrix, visitedNode, i,j,aRiver);
+                cout<< "this river = "<<aRiver.aRiverSize[0]<<endl;
+                printVisitedNode(h,w,visitedNode);
+                allRiverSize.push_back(aRiver.aRiverSize[0]);
+            }
+            else {
+                visitedNode[i][j] = true;
+                continue;
+            }
+        }
+    }
+    return allRiverSize;
+}
+int partition(vector<int>& array, int left, int right)
+{
+    int i,j, tmp;
+    int midline = left +(right - left)/2;
+    i = left;
+    j = right;
+    while (i <= j){
+        while (array[i] < array[midline]){
+            i++;
+        }
+        while ( array[j] > array[midline])
+        {
+            j--;
+        }
+        if (i <= j) {
+            tmp = array[i];
+            array[i]=array[j];
+            array[j] = tmp;
+            i++;
+            j--;
+        }
+    }
+}
+
+void quicksort(vector<int>& array, int left, int right)
+{
+
+    if (left < right){
+        int midindex = partition(array, left, right);
+        quicksort(array, left , midindex-1);
+        quicksort(array, midindex, right);
+    }
+}
+
+
+//twosum using O(nlogn)time|O(1) space
+
+vector<int> twosum(vector<int>& array, int target)
+{
+    vector<int> result;
+    //sort array using quick sort
+    quicksort(array, 0, array.size()-1);
+    int left, right;
+    left = 0;
+    right = array.size() -1 ;
+    while ((left != array.size() -1) && ( right != 0)){
+        if ((array[left] + array[right]) < target){
+            left ++;
+        }
+        else if ((array[left] + array[right]) > target){
+            right --;
+        }
+        else {
+            result.push_back(array[left]);
+            result.push_back(array[right]);
+            return result;
+        }
+    }
+    return {};
+}
+template <class T>
+class btree
+{
+    public:
+    struct node{
+        T data;
+        node* left;
+        node* right;
+        node(T d, node* y = 0, node* z = 0):data(d), left(y),right(z){}
+    };
+    node* root;
+    btree(){}
+    ~btree(){}
+    void insert(node* tree, T data);
+    void display(node* tree, int space);
+};
+template<class T>
+void btree<T>::insert(node* tree, T val)
+{
+    node* newnode = new node(val, NULL, NULL);
+    node* newnode_parent;
+    if (tree == NULL) {
+        this->root = newnode;
+        return;
+    }
+    // use iteration to insert the data
+    node* current = tree;
+    while (current != NULL){
+        newnode_parent = current;
+        if (val < current->data){
+            current = current->left;
+        }
+        else if (val > current->data){
+            current = current->right;
+        }
+    }
+    if (val < newnode_parent-> data){
+        newnode_parent->left = newnode;
+    }else {
+        newnode_parent->right = newnode;
+    }
+}
+template <class T>
+void btree<T>::display(node* tree, int space)
+{
+    if (tree == NULL) return;
+    space += 5;
+    display(tree->right, space);
+    // print data
+    cout<<endl;
+    cout<<std::setfill(' ')<<std::setw(space);
+    cout<<tree->data;
+    
+    display(tree->left, space);
+}
+
+//find closest value in BST
+#include <float.h>
+#include <cmath>
+
+class BST {
+  public:
+    int value;
+    BST* left;
+    BST* right;
+
+    BST(int val);
+    BST& insert(int val);
+};
+int findClosestValueInBstHelper(BST* tree, int target, float closestValue);
+
+int findClosestValueInBst(BST* tree, int target) {
+  // Write your code here.
+	return findClosestValueInBstHelper(tree, target, DBL_MAX);
+}
+
+int findClosestValueInBstHelper(BST* tree, int target, float closestValue)
+{
+	int currentValue = tree->value;
+	if (abs(target - currentValue) < abs(target - closestValue)){
+		closestValue = currentValue;
+	}
+	while ((tree != NULL) && (closestValue != target)){
+		if(currentValue < target){
+			findClosestValueInBstHelper(tree->right, target, closestValue);
+		}
+		else if (currentValue > target){
+			findClosestValueInBstHelper(tree->left, target, closestValue);
+		}
+	}
+	return closestValue;
+}
+
+vector<int> twoNumberSum(vector<int> array, int targetSum) {
+  // Write your code here.
+	unordered_map<int, int> cache;
+	vector<int> result;
+	int len = array.size();
+	for (int num : array){
+		int reminder = abs(targetSum - num);
+		if(cache.find(reminder) != cache.end()){
+			result.push_back (num);
+			result.push_back(reminder);
+			return result;
+		}else {
+			cache.insert({num, 1});
+		}
+	}
+	return {};
+}
+
+class Node {
+  public:
+    string name;
+    vector<Node*> children;
+
+    Node(string str) {
+      name = str;
+    }
+
+    vector<string> depthFirstSearch(vector<string>* array) {
+      // Write your code here.
+			array->push_back(this->name);
+			for(int i = 0; i<this->children.size(); i++ ){
+				children[i]->depthFirstSearch(array);
+			}
+			return *array;
+    }
+
+    Node* addChild(string name) {
+      Node* child = new Node(name);
+      children.push_back(child);
+      return this;
+    }
+};
+
+
+int main() {
+Node* node = new Node("a");
+node->addChild("b");
+node->addChild("c");
+node->addChild("d");
+
+node->children[0]->addChild("e");
+cout<<node->name<<endl;
+cout<<node->children[0]->name;
+cout<<node->children[1]->name;
+cout<<node->children[2]->name;
+cout<<node->children[0]->children[0]->name;
+vector<string>* nodestr;
+*nodestr = node->depthFirstSearch(nodestr);
+for(string str:*nodestr){
+    cout<<str<<"    ";
+}
+cout<<endl;
+
+#if 0    
+    vector<vector<int>> matrix = {{1,0,0,1,0},
+                                  {1,0,1,0,0},
+                                  {0,0,1,0,1},
+                                  {1,0,1,0,1},
+                                  {1,0,1,1,0}};
+#endif
+    vector<vector<int>> matrix = {
+      {1, 1, 0, 0, 0, 0, 1, 1},
+      {1, 0, 1, 1, 1, 1, 0, 1},
+      {0, 1, 1, 0, 0, 0, 1, 1},
+    };
+    vector<int> river;
+    river = riverSizes(matrix);
+    printvector(river);
+    //std::unordered_map<int,int> cache({
+    //                                  {1,0},
+    //                                 {2,1}
+    //                                   });
+    std::vector<int> lasttwo = {0,1};
+    cout<<"(";
+    for (int i =1; i <= 6; i++){
+        cout<<getNthFib3(i,lasttwo)<<",";
+    }
+    cout<<")"<<endl;
+    // quick sort
+    vector<int> vec1 = {3,2,6,5,4,7};
+    quicksort(vec1, 0, vec1.size()-1);
+    printvector(vec1);
+    vector<int> result;
+    //result = twosum(vec1, 12);
+    result = twoNumberSum(vec1, 12);
+    cout<<"{"<<result[0]<<","<<result[1]<<"}"<<endl;
+
+    vector<int> bt = {10,5,15,2,5,13,22,1,14};
+    btree<int>* btr = new btree<int>();
+    for (int i =0; i < bt.size(); i++){
+        int j = bt[i];
+        btr->insert(btr->root, j);
+    }
+    btr->display(btr->root, 0);
+    cout<<endl;
+    if (10 <DBL_MAX) cout<< "10 < DLB_MAX"<<endl;
+    return 0;
+    //two sum
     // add two students to a linklist
     
     unique_ptr<LinkList<student>> class18 (new LinkList<student>());
@@ -235,6 +624,7 @@ int main() {
     student* s1 = new student();
     student* s2 = new student();
     student* s3 = new student();
+    LinkList<student>::Node* found_node;
     s1->name = "Tom Cruze";
     s1->age = 19;
     s2->name = "Mary Cruze";
@@ -246,6 +636,8 @@ int main() {
     class18->display();
     class18->add_tail(s3);
     class18->display();
+    found_node = class18->find_nth_node_from_tail(3);
+    found_node->data->display();
     class18->reverseList();
     class18->display();
     class18->delete_list();
@@ -343,6 +735,12 @@ int main() {
     class21->addNode(s5);
     class21->display(class21->root);
     cout<<"number of students = "<<class21->nodeCount(class21->root)<<endl;
+    vector<Tree<student>::Node*> parents;
+    vector<Tree<student>::Node*>::iterator it;
+    class21->findAncestors(s5, parents);
+    for (auto& it:parents) {
+        it->data->display();
+    }
     cout<<"find node ";
     class21->searchNode(class21->root, s5);
     delete s1;
