@@ -212,7 +212,8 @@ int rmElement(int array[], int n, int num)
     }
     return j;
 }
-//remove duplicate element of a array
+//remove duplicate element of a array without memory allocation
+// return number of items in the array.
 int rmDuplicate(int array[], int n)
 {
     int i;
@@ -230,6 +231,7 @@ int sqr(int k)
 return k*k;
 }
 
+<<<<<<< HEAD
 //nth fibnacci
 // solution 1
 int getNthFib(int n) {
@@ -617,6 +619,78 @@ cout<<endl;
     if (10 <DBL_MAX) cout<< "10 < DLB_MAX"<<endl;
     return 0;
     //two sum
+=======
+// remove duplicate char in a string, return the number of chars in the new str
+int stringmove(string s){
+    // get the string length
+    int str_len = s.size();
+    cout<<"len "<<str_len<<endl;;
+    string::iterator it = s.begin();
+
+    // new char vector, and int vector
+    vector<char> ch(str_len);
+    vector<int>  num(str_len, 0);
+    int i,j,k;
+    bool dup;
+    // start from first char, save into char vector, +1 in int vect
+    for( i =0; i < str_len && it!= s.end() ; i++){
+        ch[i] = *it;
+        num[i] ++;
+        // start from next char, until end str, if there is duplicate
+        // num[i]++ find number of duplicate
+        // this is to forward check if there is dup 
+        for (j = distance(s.begin(), it)+1; j < str_len; j++){
+            if (ch[i] == s.at(j)){
+                num[i] ++;
+            }
+        }
+        it ++;
+        // check backward if there is dup
+        // if there is dup, skip it
+        while (it != s.end()){
+            for(k =0; k<=i; k++){
+                if (ch[k]==*it) {
+                    dup = true;
+                }
+            }
+            if (dup) {
+            	it++;
+            	dup = false;
+            }else {
+            	break;
+            }
+        }
+    }
+    // char[] vect will have only unique char
+    // num[]has number of dup for that char
+    for (i=0; i<str_len;i++){
+        if(num[i] !=0){
+            for (j =0; j<num[i]; j++){
+                cout<<ch[i];
+            }
+            cout<<" "<<num[i];
+            cout<<endl;
+        }
+    }
+    //form a str from char vector
+    std::string str(ch.begin(), ch.end());
+    cout<< "ch str "<<str<<endl;
+
+    return 0;
+    
+}
+
+int main() {
+    
+    string str2, end;
+	cin >> str2;
+	int result = stringmove(str2);
+	cout << result << endl;
+    while (end != "done"){
+	    cin>>end;
+        cout<< end<<endl;
+    }
+>>>>>>> f0bac76d2cd80c07d543e96e83955a3bb41a91fe
     // add two students to a linklist
     
     unique_ptr<LinkList<student>> class18 (new LinkList<student>());

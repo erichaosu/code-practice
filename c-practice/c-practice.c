@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <limits.h>
 #include "c-practice.h"
-#include <bits/stdint-uintn.h>
+#include <stdint.h>
 
 //member functions of student
 int compareStudent(const student *s1, const student *s2)
@@ -232,12 +232,20 @@ void displaytree(treenode **root, DISPLAY display)
 
 void displaytree2(treenode **root, DISPLAY display)
 {
-    if ((*root)->data == NULL) return;
+    treenode* node1;
+    treenode* node2;
+    if ((*root) == NULL) return;
     display((*root)->data);
+    if ((*root)->left != NULL) {
+        node1 = (*root)->left;
+    }
+    if ((*root)->right != NULL) {
+        node2 = (*root)->right;
+    }
     while(1){
-        if ((*root)->left != NULL){
-            *root = (*root)->left;
-            display((*root)->data);
+        if (node1 != NULL){
+            display(node1->data);
+            node1 = node1->left;
         }else if ((*root)->right != NULL){
             *root = (*root)->right;
             display((*root)->data);
@@ -494,8 +502,42 @@ int maxXor(int left, int right) {
     }
     return maxXor_val;
 } 
+
+int* two_sum(const int* array, int array_length, int target)
+{
+    int i, j, k = 0;
+    int reminder;
+    static int result[2];
+    int temp_len = 0;
+    bool found = false;
+
+    int temp[array_length];
+    for (i = 0; i < array_length; i++){
+        reminder = target - array[i];
+        // search temp array for reminder
+        for (j = 0; j < temp_len; j++){
+            if (reminder == temp[j]){
+                found = true;
+            }
+        }
+        if (found) {
+            result[0] = array[i];
+            result[1] = reminder;
+            return result;
+        } else {
+            temp[k++] = array[i];
+            temp_len = k;
+        }   
+    }
+}
 int main()
 {
+    int test_array[6] = {1,2,3,5,6,4};
+    int* result;
+    int arr_len;
+    arr_len = sizeof(test_array)/sizeof(test_array[0]);
+    result = two_sum(test_array, arr_len, 9);
+    printf("result = { %d, %d} \n", result[0], result[1]);
     // endian check
     printf(" this system is %s\n", bigEndian()?"big endian":"small endian");
     // linklist
