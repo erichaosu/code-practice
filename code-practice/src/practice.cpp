@@ -231,7 +231,6 @@ int sqr(int k)
 return k*k;
 }
 
-<<<<<<< HEAD
 //nth fibnacci
 // solution 1
 int getNthFib(int n) {
@@ -554,22 +553,266 @@ class Node {
     }
 };
 
+// algoexpert findthreelargest num
 
+void outputShift(int position, vector<int>& output, int num);
+void updateLargest(vector<int>& output, int num);
+
+vector<int> findThreeLargestNumbers(vector<int> array) {
+  // Write your code here.
+	vector<int> output = {INT32_MIN, INT32_MIN, INT32_MIN};
+	for (int i = 0; i<array.size(); i++){
+		updateLargest(output, array[i]);
+	}
+	return output;
+}
+
+void updateLargest(vector<int>& output, int num)
+{	
+	if (num > output[2]){
+		outputShift(2, output, num);
+	}
+	else if (num > output[1]){
+		outputShift(1, output, num);
+	}
+	else if (num > output[0]){
+		outputShift(0, output, num);
+	}
+}
+
+void outputShift(int position, vector<int>& output, int num)
+{
+	if(position == 0){
+		output[0] = num;
+	}
+	else if (position == 1){
+		output[0] = output[1];
+		output[1] = num;
+	}
+	else if (position == 2){
+		output[0] = output[1];
+		output[1] = output[2];
+		output[2] = num;
+	}
+
+}
+
+class Node1 {
+  public:
+    int value;
+    Node1* prev;
+    Node1* next;
+
+    Node1(int value);
+};
+
+Node1::Node1(int value) {
+  this->value = value;
+  prev = NULL;
+  next = NULL;
+};
+// Feel free to add new properties and methods to the class.
+class DoublyLinkedList {
+  public:
+    Node1* head;
+    Node1* tail;
+
+    DoublyLinkedList() {
+      head = NULL;
+      tail = NULL;
+    }
+
+	  void insertBefore(Node1* node, Node1* nodeToInsert) {
+      // Write your code here.
+			//remove(nodeToInsert);
+			if (node == head){
+				nodeToInsert->next = head;
+				head->prev = nodeToInsert;
+				head = nodeToInsert;
+			}
+			else if (node == tail){
+				tail->prev->next = nodeToInsert;
+				nodeToInsert->prev = tail->prev;
+			}
+			else {
+				node->prev->next = nodeToInsert;
+				nodeToInsert->prev = node->prev;
+				nodeToInsert->next = node;
+				node->prev = nodeToInsert;
+			}
+    }
+
+    void setHead(Node1* node) {
+      // Write your code here.
+			if(head == NULL){
+				head = node;
+				tail = node;
+				return;
+			}
+			insertBefore(head,node);
+			
+    }
+
+    void setTail(Node1* node) {
+      // Write your code here.
+			if (tail == NULL){
+				setHead(node);
+				return;
+			}
+			insertAfter(tail,node);
+    }
+
+
+    void insertAfter(Node1* node, Node1* nodeToInsert) {
+      // Write your code here.
+			if ((nodeToInsert == head) && (nodeToInsert == tail)) return;
+			remove(nodeToInsert);
+			nodeToInsert->prev = node;
+			nodeToInsert->next = node->next;
+			if (node  == tail){
+				tail = nodeToInsert;
+			}else {
+				node->next->prev = nodeToInsert;
+			}
+			node->next = nodeToInsert;
+    }
+
+    void insertAtPosition(int position, Node1* nodeToInsert) {
+      // Write your code here.
+			if (position == 1) {
+				setHead(nodeToInsert);
+			}
+			int currentPosition = 1;
+			Node1* node = head;
+			while ((node != NULL) && (currentPosition != position)){
+				node = node->next;
+				currentPosition++;
+			}
+			if (node == NULL){
+				setTail(node);
+			}
+			else {
+				insertBefore(node, nodeToInsert);
+			}
+			
+    }
+
+    void removeNodesWithValue(int value) {
+      // Write your code here.
+			Node1* node = head;
+			while ((node != NULL) && (node->value != value)){
+				node = node->next;
+			}
+			if (node != NULL){
+				remove(node);
+			}
+			
+    }
+
+    void remove(Node1* node) {
+      // Write your code here.
+			if (node == head) {
+				head = head->next;
+			}
+			else if (node == tail) {
+				tail = tail->prev;
+			}
+			if (node->prev != NULL) node->prev->next = node->next;
+			if (node->next != NULL) node->next->prev = node->prev;
+			node->prev = NULL;
+			node->next = NULL;
+    }
+
+    bool containsNodeWithValue(int value) {
+      // Write your code here.
+			Node1* node = head;
+			while (node != NULL){
+				if (node->value == value) return true;
+				node = node->next;
+			}
+			return false;
+    }
+
+};
+// binary search
+int helper(vector<int> array, int start, int end,int target);
+int binarySearch(vector<int> array, int target) {
+  // Write your code here.
+	// recursive time = O(logn) space = O(1)
+	return helper(array, 0, array.size()-1, target);
+}
+
+int helper(vector<int> array, int start, int end,int target)
+{
+	int mid = (start+end)/2;
+	if (array[mid] == target) return mid;
+	else if (array[mid] < target){
+		return helper(array, mid+1, end, target);
+	}else {
+		return helper(array, 0, mid-1, target);
+	}
+}
+
+// bubble sort time = O(n^2), space = O(1)
+vector<int> bubbleSort(vector<int>& array) {
+  // Write your code here.
+    bool inorder = false;
+	 while(!inorder){
+        inorder = true;
+	    for (int i=0; i<array.size()-1; i++){
+	    	if (array[i] > array[i+1]){
+	    		int temp = array[i];
+	    		array[i] = array[i+1];
+	    		array[i+1] = temp;
+	    	    inorder = false;	
+	    	}	
+	    }
+    }
+    return array;
+}
 int main() {
+
+//bubble sort
+vector<int> bubblearray = {8,5,2,9,5,6,3};
+bubbleSort(bubblearray);
+for(int num:bubblearray){
+    cout<<num<<",";
+}
+cout<<endl;
+// binary search
+
+cout<<binarySearch({1, 5, 23, 111}, 111)<<endl;
+
+//linklist construct
+DoublyLinkedList linkedList;
+Node1 node1(1);
+
+linkedList.setHead(&node1);
+linkedList.remove(&node1);
+//find threelargestnumber
+vector<int> input = {141,1,17,-7,-17,-27,18,541,8,7,7};
+vector<int> output;
+output = findThreeLargestNumbers(input);
+for (int num:output){
+    cout<<num<<"   ";
+}
+cout<<endl;
+
+//deepest first search og graph
 Node* node = new Node("a");
 node->addChild("b");
 node->addChild("c");
 node->addChild("d");
 
 node->children[0]->addChild("e");
-cout<<node->name<<endl;
+cout<<node->name;
 cout<<node->children[0]->name;
 cout<<node->children[1]->name;
 cout<<node->children[2]->name;
-cout<<node->children[0]->children[0]->name;
-vector<string>* nodestr;
-*nodestr = node->depthFirstSearch(nodestr);
-for(string str:*nodestr){
+cout<<node->children[0]->children[0]->name<<endl;
+vector<string> nodestr {};
+node->depthFirstSearch(&nodestr);
+for(string str:nodestr){
     cout<<str<<"    ";
 }
 cout<<endl;
@@ -619,78 +862,6 @@ cout<<endl;
     if (10 <DBL_MAX) cout<< "10 < DLB_MAX"<<endl;
     return 0;
     //two sum
-=======
-// remove duplicate char in a string, return the number of chars in the new str
-int stringmove(string s){
-    // get the string length
-    int str_len = s.size();
-    cout<<"len "<<str_len<<endl;;
-    string::iterator it = s.begin();
-
-    // new char vector, and int vector
-    vector<char> ch(str_len);
-    vector<int>  num(str_len, 0);
-    int i,j,k;
-    bool dup;
-    // start from first char, save into char vector, +1 in int vect
-    for( i =0; i < str_len && it!= s.end() ; i++){
-        ch[i] = *it;
-        num[i] ++;
-        // start from next char, until end str, if there is duplicate
-        // num[i]++ find number of duplicate
-        // this is to forward check if there is dup 
-        for (j = distance(s.begin(), it)+1; j < str_len; j++){
-            if (ch[i] == s.at(j)){
-                num[i] ++;
-            }
-        }
-        it ++;
-        // check backward if there is dup
-        // if there is dup, skip it
-        while (it != s.end()){
-            for(k =0; k<=i; k++){
-                if (ch[k]==*it) {
-                    dup = true;
-                }
-            }
-            if (dup) {
-            	it++;
-            	dup = false;
-            }else {
-            	break;
-            }
-        }
-    }
-    // char[] vect will have only unique char
-    // num[]has number of dup for that char
-    for (i=0; i<str_len;i++){
-        if(num[i] !=0){
-            for (j =0; j<num[i]; j++){
-                cout<<ch[i];
-            }
-            cout<<" "<<num[i];
-            cout<<endl;
-        }
-    }
-    //form a str from char vector
-    std::string str(ch.begin(), ch.end());
-    cout<< "ch str "<<str<<endl;
-
-    return 0;
-    
-}
-
-int main() {
-    
-    string str2, end;
-	cin >> str2;
-	int result = stringmove(str2);
-	cout << result << endl;
-    while (end != "done"){
-	    cin>>end;
-        cout<< end<<endl;
-    }
->>>>>>> f0bac76d2cd80c07d543e96e83955a3bb41a91fe
     // add two students to a linklist
     
     unique_ptr<LinkList<student>> class18 (new LinkList<student>());
@@ -710,7 +881,7 @@ int main() {
     class18->display();
     class18->add_tail(s3);
     class18->display();
-    found_node = class18->find_nth_node_from_tail(3);
+    //found_node = class18->find_nth_node_from_tail(3);
     found_node->data->display();
     class18->reverseList();
     class18->display();
@@ -811,7 +982,7 @@ int main() {
     cout<<"number of students = "<<class21->nodeCount(class21->root)<<endl;
     vector<Tree<student>::Node*> parents;
     vector<Tree<student>::Node*>::iterator it;
-    class21->findAncestors(s5, parents);
+    //class21->findAncestors(s5, parents);
     for (auto& it:parents) {
         it->data->display();
     }
