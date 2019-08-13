@@ -13,6 +13,7 @@
 #include <memory>
 #include <iomanip>
 #include <float.h>
+#include <algorithm>
 #include "../include/practice.h"
 using namespace std;
 
@@ -770,6 +771,180 @@ vector<int> bubbleSort(vector<int>& array) {
     }
     return array;
 }
+
+// selection sort time O(n^2)| space O (1)
+void swap(int i, int j, vector<int>& array)
+{
+	int temp = array [i];
+	array[i] = array[j];
+	array[j] = temp;
+}
+
+vector<int> selectionSort(vector<int> array) {
+  // Write your code here.
+	if (array.empty()){
+		return {};
+	}
+	int currentidx =0;
+	while(currentidx < array.size()-1){
+		int smallestidx = currentidx;
+		for(int i = currentidx +1; i < array.size(); i++ ){
+			if(array[i] < array[smallestidx]){
+				smallestidx = i;
+			}
+		}
+		swap(currentidx, smallestidx, array);
+		currentidx ++;
+	}
+	return array;
+}
+//insertion sort time O(n^2)|space O(1)
+vector<int> insertionSort(vector<int> array) {
+  // Write your code here.
+	for (int i = 1; i < array.size(); i ++){
+		int j = i;
+		while(j > 0 && (array[j] < array[j-1])){
+				swap(j, j-1, array);
+				j --;
+		}
+	}
+	return array;
+}
+#if 0
+bool isPalindrome(string str) {
+  // Write your code here.
+	vector<char> reversestr = {};
+	for (int i = str.length()-1; i>=0; i--){
+		reversestr.push_back(str[i]);
+	}
+	return str == string(reversestr.begin(), reversestr.end());
+}
+// O(n) time | O(n) space
+bool helper(int start, int end, string& str)
+{
+	if (start >= end) return true;
+	else if (str[start] != str[end]){
+		return false;
+	}
+	else {
+		return helper(start+1, end-1, str);
+	}
+}
+
+bool isPalindrome(string str) 
+{
+	int first = 0;
+	int last = str.length()-1;
+	return helper(first, last, str);
+}
+#endif
+// O(n) time| O(1) space
+bool isPalindrome(string str) 
+{
+	int first = 0;
+	int last = str.length()-1;
+	while (first < last){
+		if (str[first] != str[last]){
+			return false;
+		}
+		first ++;
+		last --;
+	}
+	return true;
+}	
+
+// important unicode number
+// 0-9 48-57
+//A-Z  65 - 90
+//a-z  97-122
+char getnewletter(char letter, int key)
+{
+	int newletterunicode = letter + key;
+	if (newletterunicode <= 'z'){
+		return newletterunicode;
+	}
+	else {
+		return ('a'-1) + newletterunicode % 'z';
+	}
+}
+
+string caesarCypherEncryptor(string str, int key) {
+  // Write your code here.
+	int newkey = key % 26;
+	vector<char> newstr={};
+	for (int i =0; i < str.length(); i++){
+		newstr.push_back(getnewletter(str[i], newkey));
+	}
+	return string(newstr.begin(), newstr.end());	
+}
+
+vector<vector<int> > threeNumberSum(vector<int> array, int targetSum) {
+  // Write your code here.
+	//create result triplet array
+	vector<vector<int>> triplet = {};
+	//sort array to ascending order
+	sort(array.begin(), array.end());
+	for (int i =0; i < array.size()-2; i++){
+		int left = i+1;
+		int right = array.size()-1;
+		// left cross right means all array has been checked. 
+		while (left < right){
+			int threesum = array[i] + array[left] + array[right];
+			if (threesum == targetSum){
+				triplet.push_back({array[i],array[left],array[right]});
+				left ++;
+				right --;
+			}
+			else if (threesum < targetSum){
+				left ++;
+			}
+			else {
+				right --;
+			}
+		}
+	}
+	return triplet;
+}
+//foursum
+//time O(n^2) | space O(n^2)
+
+vector<vector<int>> foursum(vector<int>, array, int target)
+{
+    //return value
+    vector<vector<int>> quadruplets {};
+    //a unordered-map
+    unordered_map<int, vector<vector<int>>> allpairsum;
+    for(int i = 1; i<array.size() -1; i ++){
+        for(int j = i+1; j<array.size(); j++){
+            bigP = array[i] + array[j];
+            int diff = target - bigP;
+            if (allpairsum.find(diff) != allpairsum.end()){
+                // found the complement in unordered_map
+                // push array[i], array[j], and allpair into return vector
+                for(vector<int>pair: allpairsum[diff]){
+                    pair.push_back(array[i]);
+                    pair.push_back(array[j]);
+                    quadruplets.push_back(pair);
+                }
+            }
+        }
+        // insert pair of array item + array first item
+        for(int k = 0; k < i ; k++){
+            //add this is after 
+            int currentsum = array[i] + array[k];
+            //if not find this sum
+            if (allpairsum).find(currentsum) == allpairsum.end()){
+                // push sum and pair into allpairsum
+                allpairsum[currentsum] = vector<vector<int>> {[array[k], array[i]]}
+            }
+            else {
+                allpairsum[currentsum].push_back (vector<vector<int>>{[array[k], arrau[i]]});
+            }
+        }
+    }
+    return quadruplets;
+}
+
 int main() {
 
 //bubble sort
