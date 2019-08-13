@@ -908,7 +908,7 @@ vector<vector<int> > threeNumberSum(vector<int> array, int targetSum) {
 //foursum
 //time O(n^2) | space O(n^2)
 
-vector<vector<int>> foursum(vector<int>, array, int target)
+vector<vector<int>> foursum(vector<int> array, int target)
 {
     //return value
     vector<vector<int>> quadruplets {};
@@ -916,7 +916,7 @@ vector<vector<int>> foursum(vector<int>, array, int target)
     unordered_map<int, vector<vector<int>>> allpairsum;
     for(int i = 1; i<array.size() -1; i ++){
         for(int j = i+1; j<array.size(); j++){
-            bigP = array[i] + array[j];
+            int bigP = array[i] + array[j];
             int diff = target - bigP;
             if (allpairsum.find(diff) != allpairsum.end()){
                 // found the complement in unordered_map
@@ -933,19 +933,72 @@ vector<vector<int>> foursum(vector<int>, array, int target)
             //add this is after 
             int currentsum = array[i] + array[k];
             //if not find this sum
-            if (allpairsum).find(currentsum) == allpairsum.end()){
-                // push sum and pair into allpairsum
-                allpairsum[currentsum] = vector<vector<int>> {[array[k], array[i]]}
+            if (allpairsum.find(currentsum) == allpairsum.end()){
+                // not find this key in allpairsum map, add the key and value
+                allpairsum[currentsum] = vector<vector<int>> {{array[k], array[i]}};
             }
             else {
-                allpairsum[currentsum].push_back (vector<vector<int>>{[array[k], arrau[i]]});
+                //the key/value already in allpairsum map, add to the vector back
+                allpairsum[currentsum].push_back (vector<int> {array[k], array[i]});
             }
         }
     }
     return quadruplets;
 }
 
+//deepest first search og graph
+//array remove element
+int removeelement(int array[], int length, int element)
+{
+    int j = 0;
+    for (int i =0; i <length; i++){
+        if (array[i] == element){
+            continue;
+        }
+        array[j] = array[i];
+        j++;
+    }
+    return j;
+}
+// remove duplicate array member
+int remdup(int array[], int length)
+{
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    bool duplicate = false;
+    for (i = 0; i < length; i++){
+        //find if array[i] has duplicate in array
+        for (j = 0; j < length; j ++){
+            if ((array[j] == array[i]) && ( i != j )){
+                duplicate = true;
+                break;
+            }
+        } 
+        if (duplicate) {
+            duplicate = false;
+            continue;
+        }
+        array[k] = array[i];
+        k ++;
+    }
+    return k;
+}
+
 int main() {
+
+//foursum
+vector<int> sumarray = {7,8,5,6,-1,2,6};
+vector<vector<int>> quadruplet {};
+quadruplet = foursum(sumarray, 13);
+for (vector<int> result: quadruplet){
+    cout<<"{";
+    for(int i: result){
+        cout<<i<<",";
+    }
+    cout<<"},";
+}
+cout<<endl;
 
 //bubble sort
 vector<int> bubblearray = {8,5,2,9,5,6,3};
@@ -973,7 +1026,14 @@ for (int num:output){
 }
 cout<<endl;
 
-//deepest first search og graph
+int array1[] = {1,2,2,3,2,4};
+cout<<"array size after remove "
+    <<removeelement(array1,sizeof(array1)/sizeof(array1[0]), 2)
+    <<endl;
+cout<<"length of array after removeduplicate "
+    <<remdup(array1, sizeof(array1)/sizeof(array1[0]))
+    <<endl;
+
 Node* node = new Node("a");
 node->addChild("b");
 node->addChild("c");
