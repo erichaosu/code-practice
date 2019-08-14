@@ -233,7 +233,7 @@ return k*k;
 }
 
 //nth fibnacci
-// solution 1
+// solution 1 time O(n) |space O(n)
 int getNthFib(int n) {
   // Write your code here.
 	if (n == 1){
@@ -246,7 +246,7 @@ int getNthFib(int n) {
 		return getNthFib(n-1)+ getNthFib(n-2);
 	}
 }
-// solution 2
+// solution 2 simplified solution 1time O(n) |space O(n)
 int getNthFib2(int n, std::unordered_map<int,int> cache)
 {    
     if (cache.find(n) != cache.end()){
@@ -257,7 +257,7 @@ int getNthFib2(int n, std::unordered_map<int,int> cache)
     return cache[n];
 	
 }
-// solution 3
+// solution 3 timeO (n)| space O (1)
 int getNthFib3(int n, std::vector<int> lasttwo)
 {
     if(n == 1) return lasttwo[0];
@@ -393,7 +393,7 @@ void quicksort(vector<int>& array, int left, int right)
 }
 
 
-//twosum using O(nlogn)time|O(1) space
+//twosum using left and right pointers O(nlogn)time|O(1) space
 
 vector<int> twosum(vector<int>& array, int target)
 {
@@ -510,25 +510,6 @@ int findClosestValueInBstHelper(BST* tree, int target, float closestValue)
 	}
 	return closestValue;
 }
-
-vector<int> twoNumberSum(vector<int> array, int targetSum) {
-  // Write your code here.
-	unordered_map<int, int> cache;
-	vector<int> result;
-	int len = array.size();
-	for (int num : array){
-		int reminder = abs(targetSum - num);
-		if(cache.find(reminder) != cache.end()){
-			result.push_back (num);
-			result.push_back(reminder);
-			return result;
-		}else {
-			cache.insert({num, 1});
-		}
-	}
-	return {};
-}
-
 class Node {
   public:
     string name;
@@ -878,6 +859,25 @@ string caesarCypherEncryptor(string str, int key) {
 	return string(newstr.begin(), newstr.end());	
 }
 
+// time O(n) |space O(n)
+vector<int> twoNumberSum(vector<int> array, int targetSum) {
+  // Write your code here.
+	unordered_map<int, int> cache;
+	vector<int> result;
+	int len = array.size();
+	for (int num : array){
+		int reminder = abs(targetSum - num);
+		if(cache.find(reminder) != cache.end()){
+			result.push_back (num);
+			result.push_back(reminder);
+			return result;
+		}else {
+			cache.insert({num, 1});
+		}
+	}
+	return {};
+}
+// time O(n) |space O(1)
 vector<vector<int> > threeNumberSum(vector<int> array, int targetSum) {
   // Write your code here.
 	//create result triplet array
@@ -907,7 +907,6 @@ vector<vector<int> > threeNumberSum(vector<int> array, int targetSum) {
 }
 //foursum
 //time O(n^2) | space O(n^2)
-
 vector<vector<int>> foursum(vector<int> array, int target)
 {
     //return value
