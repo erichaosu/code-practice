@@ -734,7 +734,7 @@ int helper(vector<int> array, int start, int end,int target)
 		return helper(array, 0, mid-1, target);
 	}
 }
-
+//////////start of all sorting
 // bubble sort time = O(n^2), space = O(1)
 vector<int> bubbleSort(vector<int>& array) {
   // Write your code here.
@@ -791,6 +791,8 @@ vector<int> insertionSort(vector<int> array) {
 	}
 	return array;
 }
+
+//////////////////////end of all sorting
 #if 0
 bool isPalindrome(string str) {
   // Write your code here.
@@ -860,22 +862,22 @@ string caesarCypherEncryptor(string str, int key) {
 }
 
 // time O(n) |space O(n)
-vector<int> twoNumberSum(vector<int> array, int targetSum) {
+vector<vector<int>> twoNumberSum(vector<int> array, int targetSum) {
   // Write your code here.
 	unordered_map<int, int> cache;
-	vector<int> result;
+	vector<vector<int>> result {};
+    vector<int> i;
 	int len = array.size();
 	for (int num : array){
 		int reminder = abs(targetSum - num);
 		if(cache.find(reminder) != cache.end()){
-			result.push_back (num);
-			result.push_back(reminder);
-			return result;
-		}else {
-			cache.insert({num, 1});
+			i.push_back (num);
+			i.push_back(reminder);
+			result.push_back(i);
 		}
+		cache.insert({num, 1});
 	}
-	return {};
+	return result;
 }
 // time O(n) |space O(1)
 vector<vector<int> > threeNumberSum(vector<int> array, int targetSum) {
@@ -986,19 +988,6 @@ int remdup(int array[], int length)
 
 int main() {
 
-//foursum
-vector<int> sumarray = {7,8,5,6,-1,2,6};
-vector<vector<int>> quadruplet {};
-quadruplet = foursum(sumarray, 13);
-for (vector<int> result: quadruplet){
-    cout<<"{";
-    for(int i: result){
-        cout<<i<<",";
-    }
-    cout<<"},";
-}
-cout<<endl;
-
 //bubble sort
 vector<int> bubblearray = {8,5,2,9,5,6,3};
 bubbleSort(bubblearray);
@@ -1080,10 +1069,46 @@ cout<<endl;
     vector<int> vec1 = {3,2,6,5,4,7};
     quicksort(vec1, 0, vec1.size()-1);
     printvector(vec1);
-    vector<int> result;
-    //result = twosum(vec1, 12);
-    result = twoNumberSum(vec1, 12);
-    cout<<"{"<<result[0]<<","<<result[1]<<"}"<<endl;
+/////start of sum functions    
+    //twosum
+    vector<vector<int>> result {};
+    result = twoNumberSum(vec1, 8);
+    cout<<"twosum of 8 ={";
+    for(vector<int> j: result){
+        cout<<"{";
+        for(int k: j){
+            cout<<k<<",";
+        }
+        cout<<"},";
+    }
+    cout<<endl;
+    //threesum
+    vector<vector<int>> threesumresult {};
+    threesumresult = threeNumberSum(vec1, 12);
+    cout<<"threesum of 12 = ";
+    for (vector<int> i: threesumresult){
+        cout<<"{";
+        for(int j: i){
+            cout<<j<<",";
+        }
+        cout<<"},";
+    }
+    cout<<endl;
+    //foursum
+    vector<int> sumarray = {7,8,5,6,-1,2,6};
+    vector<vector<int>> quadruplet {};
+    quadruplet = foursum(sumarray, 13);
+    cout<<"foursum of 13 = ";
+    for (vector<int> result: quadruplet){
+        cout<<"{";
+        for(int i: result){
+            cout<<i<<",";
+        }
+        cout<<"},";
+    }
+    cout<<endl;
+
+////endof sum functions
 
     vector<int> bt = {10,5,15,2,5,13,22,1,14};
     btree<int>* btr = new btree<int>();
@@ -1095,7 +1120,7 @@ cout<<endl;
     cout<<endl;
     if (10 <DBL_MAX) cout<< "10 < DLB_MAX"<<endl;
     return 0;
-    //two sum
+    
     // add two students to a linklist
     
     unique_ptr<LinkList<student>> class18 (new LinkList<student>());
