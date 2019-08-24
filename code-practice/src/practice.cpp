@@ -483,10 +483,134 @@ class BST {
     int value;
     BST* left;
     BST* right;
-
+    BST(){}
+    ~BST(){}
     BST(int val);
-    BST& insert(int val);
+    BST* insert(int val);
+    BST* search(int value);
+    void remove(int value);
+    void printBST(int space);
+    int getmin();
 };
+int BST::getmin()
+{
+    BST* current = this;
+    BST* parent;
+    while (current != NULL){
+        parent = current;
+        current = current->left;
+    }
+    return parent->value;
+}
+BST::BST(int value)
+{
+    this->value = value;
+    this->left = NULL;
+    this->right = NULL;
+}
+BST* BST::insert(int value)
+{
+    BST* newNode = new BST(value);
+    BST* currentNode = this;
+    BST* current_parent;
+    if (currentNode == NULL) {
+        currentNode = newNode;
+        return currentNode;
+    }
+    while (currentNode != NULL){
+        current_parent = currentNode;
+        if (value < currentNode->value){
+            currentNode = currentNode->left;
+        }
+        else if (value >= currentNode->value){
+            currentNode = currentNode ->right;
+        }
+    }
+    currentNode = newNode;
+    if (value < current_parent->value){
+        current_parent->left = currentNode;
+    }
+    else {
+        current_parent->right = currentNode;
+    }
+    return this; 
+}
+
+void BST::remove(int value)
+{
+    BST* current = this;
+    BST* parent;
+    //find the node to be removed
+    while ((current != NULL) && (current->value != value)){
+        parent = current;
+        if (value < current->value){
+            current = current->left;
+        }
+        else {
+            current = current->right;
+        }
+    }
+        
+    // found the node
+    // if this node has no left and right children, it's leaf node
+    if ((current->left == NULL) &&(current->right == NULL)){
+        parent->left = NULL;
+        parent->right = NULL;
+        delete current;
+    }
+    // if this node has both left and right children
+    else if ((current->left != NULL)&&(current->right != NULL)){
+        int minvalue = current->right->getmin();
+        this->remove(minvalue);
+        current->value = minvalue;
+
+    }
+    // only one child exist for this node
+    else {
+        BST* child = current->left? current->left:current->right;
+        if (current == parent->left){
+            parent->left = child;
+        }
+        else {
+            parent->right = child;
+        }
+        delete current;
+    }
+}
+BST* BST::search(int val)
+{
+    BST* current = this;
+    while((current != NULL) && (current->value != val)){
+        if (val < current->value){
+            current = current->left;
+        }
+        else {
+            current = current->right;
+        }
+    }
+    if(current->value == val){
+        return current;
+    }else {
+        cout<<"can not find "<<endl;
+        return NULL;
+    }
+
+}
+void BST::printBST(int space)
+{
+    BST* current = this;
+    
+    space +=20;
+    if(current->right != NULL){
+        current->right->printBST(space);
+    }
+    for (int i=0; i<space; i++ ){ cout<<" ";}
+    cout<<current->value<<endl;
+    if(current->left != NULL){
+        current->left->printBST(space);
+    }
+    
+}
 int findClosestValueInBstHelper(BST* tree, int target, float closestValue);
 
 int findClosestValueInBst(BST* tree, int target) {
@@ -1109,6 +1233,18 @@ cout<<endl;
     cout<<endl;
 
 ////endof sum functions
+
+    vector<int> bstvalue = {1,2,4,5,6};
+    BST* mybst = new BST(3);
+    BST* findbst;
+    for(int i:bstvalue){
+        mybst->insert(i);
+    }
+    mybst->printBST(0);
+    mybst->remove(3);
+    mybst->printBST(0);
+    findbst = mybst->search(5);
+    findbst->printBST(0);
 
     vector<int> bt = {10,5,15,2,5,13,22,1,14};
     btree<int>* btr = new btree<int>();
