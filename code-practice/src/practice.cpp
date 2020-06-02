@@ -97,8 +97,11 @@ bool solution::isBigEndian()
 {
     uint32_t i = 12345678;
     uint8_t *j= (uint8_t*)&i;
-    cout<<(*j-48)<<endl;
-    return (*j == 0);
+    //cout<<(*j-48)<<endl;
+    if (*j == 12) {
+        return true;
+    }
+    return false;
 }
 // find any two number sum which equal to target
 vector<int> solution::twoSum(vector<int>& nums, int target) {
@@ -223,7 +226,7 @@ int rmDuplicate(int array[], int n)
             array[++j] = array[i];
         } 
     }
-    return j +1;
+    return j;
 }
 
 int sqr(int k)
@@ -510,114 +513,67 @@ int findClosestValueInBstHelper(BST* tree, int target, float closestValue)
 	return closestValue;
 }
 
-vector<int> twoNumberSum(vector<int> array, int targetSum) {
-  // Write your code here.
-	unordered_map<int, int> cache;
-	vector<int> result;
-	int len = array.size();
-	for (int num : array){
-		int reminder = abs(targetSum - num);
-		if(cache.find(reminder) != cache.end()){
-			result.push_back (num);
-			result.push_back(reminder);
-			return result;
-		}else {
-			cache.insert({num, 1});
-		}
-	}
-	return {};
+int getNthFib(int n, std::unordered_map<int,int> cache)
+{
+    if (cache.find(n) != cache.end()){
+        return cache[n];
+    }
+    cache[n] = getNthFib((n-1), cache) + getNthFib((n-2), cache);
+    return cache[n];
 }
 
-class Node {
-  public:
-    string name;
-    vector<Node*> children;
-
-    Node(string str) {
-      name = str;
+int getNthFib2(int n, std::vector<int> lasttwo)
+{
+    int nextfib;
+    if (n == 1) return 1;
+    else if (n == 2) return 1;
+    int i = 3;
+    lasttwo[0] = 1;
+    lasttwo[1] = 1;
+    while (i <= n){
+        nextfib = lasttwo[0]+lasttwo[1];
+        lasttwo[0] = lasttwo[1];
+        lasttwo[1] = nextfib;
+        i++;
     }
-
-    vector<string> depthFirstSearch(vector<string>* array) {
-      // Write your code here.
-			array->push_back(this->name);
-			for(int i = 0; i<this->children.size(); i++ ){
-				children[i]->depthFirstSearch(array);
-			}
-			return *array;
-    }
-
-    Node* addChild(string name) {
-      Node* child = new Node(name);
-      children.push_back(child);
-      return this;
-    }
-};
-
-
+    return nextfib;
+}
 int main() {
-Node* node = new Node("a");
-node->addChild("b");
-node->addChild("c");
-node->addChild("d");
 
-node->children[0]->addChild("e");
-cout<<node->name<<endl;
-cout<<node->children[0]->name;
-cout<<node->children[1]->name;
-cout<<node->children[2]->name;
-cout<<node->children[0]->children[0]->name;
-vector<string>* nodestr;
-*nodestr = node->depthFirstSearch(nodestr);
-for(string str:*nodestr){
-    cout<<str<<"    ";
-}
-cout<<endl;
-
-#if 0    
-    vector<vector<int>> matrix = {{1,0,0,1,0},
-                                  {1,0,1,0,0},
-                                  {0,0,1,0,1},
-                                  {1,0,1,0,1},
-                                  {1,0,1,1,0}};
-#endif
-    vector<vector<int>> matrix = {
-      {1, 1, 0, 0, 0, 0, 1, 1},
-      {1, 0, 1, 1, 1, 1, 0, 1},
-      {0, 1, 1, 0, 0, 0, 1, 1},
-    };
-    vector<int> river;
-    river = riverSizes(matrix);
-    printvector(river);
-    //std::unordered_map<int,int> cache({
-    //                                  {1,0},
-    //                                 {2,1}
-    //                                   });
+    std:unordered_map<int,int> cache ({{1,1},
+                                      {2,1}});
     std::vector<int> lasttwo = {0,1};
-    cout<<"(";
-    for (int i =1; i <= 6; i++){
-        cout<<getNthFib3(i,lasttwo)<<",";
+    for(int i = 1; i<= 6; i++){
+        //cout<<getNthFib(i,cache)<<", ";
+        cout<<getNthFib2(i, lasttwo)<<", ";
     }
-    cout<<")"<<endl;
-    // quick sort
-    vector<int> vec1 = {3,2,6,5,4,7};
-    quicksort(vec1, 0, vec1.size()-1);
-    printvector(vec1);
-    vector<int> result;
-    //result = twosum(vec1, 12);
-    result = twoNumberSum(vec1, 12);
-    cout<<"{"<<result[0]<<","<<result[1]<<"}"<<endl;
-
-    vector<int> bt = {10,5,15,2,5,13,22,1,14};
-    btree<int>* btr = new btree<int>();
-    for (int i =0; i < bt.size(); i++){
-        int j = bt[i];
-        btr->insert(btr->root, j);
-    }
-    btr->display(btr->root, 0);
-    cout<<endl;
-    if (10 <DBL_MAX) cout<< "10 < DLB_MAX"<<endl;
     return 0;
-    //two sum
+    singleton* sin;
+    cout<<"0x"<<hex<<(uintptr_t)sin->getInstance()<<endl;
+    singleton* sin1;
+    cout<<"0x"<<hex<<(uintptr_t)sin1->getInstance()<<endl;
+    //singleton* sin2;
+
+    Tree<int>* integerTree;
+    integerTree = new Tree<int>();
+    
+    int var = 4;
+    integerTree->addNode(integerTree->root, &var);
+    int var1 = 2;
+    integerTree->addNode(integerTree->root, &var1);
+    int var2 = 5;
+    integerTree->addNode(integerTree->root, &var2);
+    int var3 = 1;
+    integerTree->addNode(integerTree->root, &var3);
+    int var4 = 3;
+    integerTree->addNode(integerTree->root, &var4);
+    int var5 = 6;
+    integerTree->addNode(integerTree->root, &var5);
+
+    cout<<integerTree->countNode(integerTree->root)<<endl;
+    integerTree->display(integerTree->root);
+    //cout<<hex<<(uintptr_t)sin2->getInstance()<<endl;    
+
     // add two students to a linklist
     
     unique_ptr<LinkList<student>> class18 (new LinkList<student>());
@@ -637,7 +593,7 @@ cout<<endl;
     class18->display();
     class18->add_tail(s3);
     class18->display();
-    found_node = class18->find_nth_node_from_tail(3);
+    //found_node = class18->find_nth_node_from_tail(3);
     found_node->data->display();
     class18->reverseList();
     class18->display();
@@ -738,7 +694,7 @@ cout<<endl;
     cout<<"number of students = "<<class21->nodeCount(class21->root)<<endl;
     vector<Tree<student>::Node*> parents;
     vector<Tree<student>::Node*>::iterator it;
-    class21->findAncestors(s5, parents);
+    //class21->findAncestors(s5, parents);
     for (auto& it:parents) {
         it->data->display();
     }
@@ -822,13 +778,7 @@ cout<<endl;
 
     int new_array[sqr(SIZE1)*3];
     cout<<sizeof(new_array)<<endl;
-    singleton* sin;
-    singleton* sin1;
-    singleton* sin2;
 
-    cout<<hex<<(uintptr_t)sin->getInstance()<<endl;
-    cout<<hex<<(uintptr_t)sin1->getInstance()<<endl;
-    cout<<hex<<(uintptr_t)sin2->getInstance()<<endl;
     
     unsigned int a1;
     a1 = 7;
@@ -836,5 +786,13 @@ cout<<endl;
     cout<<"a = "<<a1<<endl;
     port &= 0x5;
     cout<<"a = "<<a1<<endl;
+        string str2, end;
+	cin >> str2;
+	int result = stringmove(str2);
+	cout << result << endl;
+    while (end != "done"){
+	    cin>>end;
+        cout<< end<<endl;
+    }
     exit(0);
 }
