@@ -13,6 +13,7 @@
 #include <memory>
 #include <iomanip>
 #include <float.h>
+#include <algorithm>
 #include "../include/practice.h"
 using namespace std;
 
@@ -235,7 +236,7 @@ return k*k;
 }
 
 //nth fibnacci
-// solution 1
+// solution 1 time O(n) |space O(n)
 int getNthFib(int n) {
   // Write your code here.
 	if (n == 1){
@@ -248,7 +249,7 @@ int getNthFib(int n) {
 		return getNthFib(n-1)+ getNthFib(n-2);
 	}
 }
-// solution 2
+// solution 2 simplified solution 1time O(n) |space O(n)
 int getNthFib2(int n, std::unordered_map<int,int> cache)
 {    
     if (cache.find(n) != cache.end()){
@@ -259,7 +260,7 @@ int getNthFib2(int n, std::unordered_map<int,int> cache)
     return cache[n];
 	
 }
-// solution 3
+// solution 3 timeO (n)| space O (1)
 int getNthFib3(int n, std::vector<int> lasttwo)
 {
     if(n == 1) return lasttwo[0];
@@ -395,7 +396,7 @@ void quicksort(vector<int>& array, int left, int right)
 }
 
 
-//twosum using O(nlogn)time|O(1) space
+//twosum using left and right pointers O(nlogn)time|O(1) space
 
 vector<int> twosum(vector<int>& array, int target)
 {
@@ -485,10 +486,134 @@ class BST {
     int value;
     BST* left;
     BST* right;
-
+    BST(){}
+    ~BST(){}
     BST(int val);
-    BST& insert(int val);
+    BST* insert(int val);
+    BST* search(int value);
+    void remove(int value);
+    void printBST(int space);
+    int getmin();
 };
+int BST::getmin()
+{
+    BST* current = this;
+    BST* parent;
+    while (current != NULL){
+        parent = current;
+        current = current->left;
+    }
+    return parent->value;
+}
+BST::BST(int value)
+{
+    this->value = value;
+    this->left = NULL;
+    this->right = NULL;
+}
+BST* BST::insert(int value)
+{
+    BST* newNode = new BST(value);
+    BST* currentNode = this;
+    BST* current_parent;
+    if (currentNode == NULL) {
+        currentNode = newNode;
+        return currentNode;
+    }
+    while (currentNode != NULL){
+        current_parent = currentNode;
+        if (value < currentNode->value){
+            currentNode = currentNode->left;
+        }
+        else if (value >= currentNode->value){
+            currentNode = currentNode ->right;
+        }
+    }
+    currentNode = newNode;
+    if (value < current_parent->value){
+        current_parent->left = currentNode;
+    }
+    else {
+        current_parent->right = currentNode;
+    }
+    return this; 
+}
+
+void BST::remove(int value)
+{
+    BST* current = this;
+    BST* parent;
+    //find the node to be removed
+    while ((current != NULL) && (current->value != value)){
+        parent = current;
+        if (value < current->value){
+            current = current->left;
+        }
+        else {
+            current = current->right;
+        }
+    }
+        
+    // found the node
+    // if this node has no left and right children, it's leaf node
+    if ((current->left == NULL) &&(current->right == NULL)){
+        parent->left = NULL;
+        parent->right = NULL;
+        delete current;
+    }
+    // if this node has both left and right children
+    else if ((current->left != NULL)&&(current->right != NULL)){
+        int minvalue = current->right->getmin();
+        this->remove(minvalue);
+        current->value = minvalue;
+
+    }
+    // only one child exist for this node
+    else {
+        BST* child = current->left? current->left:current->right;
+        if (current == parent->left){
+            parent->left = child;
+        }
+        else {
+            parent->right = child;
+        }
+        delete current;
+    }
+}
+BST* BST::search(int val)
+{
+    BST* current = this;
+    while((current != NULL) && (current->value != val)){
+        if (val < current->value){
+            current = current->left;
+        }
+        else {
+            current = current->right;
+        }
+    }
+    if(current->value == val){
+        return current;
+    }else {
+        cout<<"can not find "<<endl;
+        return NULL;
+    }
+
+}
+void BST::printBST(int space)
+{
+    BST* current = this;
+    
+    space +=20;
+    if(current->right != NULL){
+        current->right->printBST(space);
+    }
+    for (int i=0; i<space; i++ ){ cout<<" ";}
+    cout<<current->value<<endl;
+    if(current->left != NULL){
+        current->left->printBST(space);
+    }
+    
+}
 int findClosestValueInBstHelper(BST* tree, int target, float closestValue);
 
 int findClosestValueInBst(BST* tree, int target) {
@@ -512,11 +637,30 @@ int findClosestValueInBstHelper(BST* tree, int target, float closestValue)
 	}
 	return closestValue;
 }
+<<<<<<< HEAD
 
 int getNthFib(int n, std::unordered_map<int,int> cache)
 {
     if (cache.find(n) != cache.end()){
         return cache[n];
+=======
+class Node {
+  public:
+    string name;
+    vector<Node*> children;
+
+    Node(string str) {
+      name = str;
+    }
+
+    vector<string> depthFirstSearch(vector<string>* array) {
+      // Write your code here.
+			array->push_back(this->name);
+			for(int i = 0; i<this->children.size(); i++ ){
+				children[i]->depthFirstSearch(array);
+			}
+			return *array;
+>>>>>>> 025dc3bfcd9cf19ee333e76308a7fb6ad1a248db
     }
     cache[n] = getNthFib((n-1), cache) + getNthFib((n-2), cache);
     return cache[n];
@@ -536,9 +680,600 @@ int getNthFib2(int n, std::vector<int> lasttwo)
         lasttwo[1] = nextfib;
         i++;
     }
+<<<<<<< HEAD
     return nextfib;
 }
 int main() {
+=======
+};
+
+// algoexpert findthreelargest num
+
+void outputShift(int position, vector<int>& output, int num);
+void updateLargest(vector<int>& output, int num);
+
+vector<int> findThreeLargestNumbers(vector<int> array) {
+  // Write your code here.
+	vector<int> output = {INT32_MIN, INT32_MIN, INT32_MIN};
+	for (int i = 0; i<array.size(); i++){
+		updateLargest(output, array[i]);
+	}
+	return output;
+}
+
+void updateLargest(vector<int>& output, int num)
+{	
+	if (num > output[2]){
+		outputShift(2, output, num);
+	}
+	else if (num > output[1]){
+		outputShift(1, output, num);
+	}
+	else if (num > output[0]){
+		outputShift(0, output, num);
+	}
+}
+
+void outputShift(int position, vector<int>& output, int num)
+{
+	if(position == 0){
+		output[0] = num;
+	}
+	else if (position == 1){
+		output[0] = output[1];
+		output[1] = num;
+	}
+	else if (position == 2){
+		output[0] = output[1];
+		output[1] = output[2];
+		output[2] = num;
+	}
+
+}
+
+class Node1 {
+  public:
+    int value;
+    Node1* prev;
+    Node1* next;
+
+    Node1(int value);
+};
+
+Node1::Node1(int value) {
+  this->value = value;
+  prev = NULL;
+  next = NULL;
+};
+// Feel free to add new properties and methods to the class.
+class DoublyLinkedList {
+  public:
+    Node1* head;
+    Node1* tail;
+
+    DoublyLinkedList() {
+      head = NULL;
+      tail = NULL;
+    }
+
+	  void insertBefore(Node1* node, Node1* nodeToInsert) {
+      // Write your code here.
+			//remove(nodeToInsert);
+			if (node == head){
+				nodeToInsert->next = head;
+				head->prev = nodeToInsert;
+				head = nodeToInsert;
+			}
+			else if (node == tail){
+				tail->prev->next = nodeToInsert;
+				nodeToInsert->prev = tail->prev;
+			}
+			else {
+				node->prev->next = nodeToInsert;
+				nodeToInsert->prev = node->prev;
+				nodeToInsert->next = node;
+				node->prev = nodeToInsert;
+			}
+    }
+
+    void setHead(Node1* node) {
+      // Write your code here.
+			if(head == NULL){
+				head = node;
+				tail = node;
+				return;
+			}
+			insertBefore(head,node);
+			
+    }
+
+    void setTail(Node1* node) {
+      // Write your code here.
+			if (tail == NULL){
+				setHead(node);
+				return;
+			}
+			insertAfter(tail,node);
+    }
+
+
+    void insertAfter(Node1* node, Node1* nodeToInsert) {
+      // Write your code here.
+			if ((nodeToInsert == head) && (nodeToInsert == tail)) return;
+			remove(nodeToInsert);
+			nodeToInsert->prev = node;
+			nodeToInsert->next = node->next;
+			if (node  == tail){
+				tail = nodeToInsert;
+			}else {
+				node->next->prev = nodeToInsert;
+			}
+			node->next = nodeToInsert;
+    }
+
+    void insertAtPosition(int position, Node1* nodeToInsert) {
+      // Write your code here.
+			if (position == 1) {
+				setHead(nodeToInsert);
+			}
+			int currentPosition = 1;
+			Node1* node = head;
+			while ((node != NULL) && (currentPosition != position)){
+				node = node->next;
+				currentPosition++;
+			}
+			if (node == NULL){
+				setTail(node);
+			}
+			else {
+				insertBefore(node, nodeToInsert);
+			}
+			
+    }
+
+    void removeNodesWithValue(int value) {
+      // Write your code here.
+			Node1* node = head;
+			while ((node != NULL) && (node->value != value)){
+				node = node->next;
+			}
+			if (node != NULL){
+				remove(node);
+			}
+			
+    }
+
+    void remove(Node1* node) {
+      // Write your code here.
+			if (node == head) {
+				head = head->next;
+			}
+			else if (node == tail) {
+				tail = tail->prev;
+			}
+			if (node->prev != NULL) node->prev->next = node->next;
+			if (node->next != NULL) node->next->prev = node->prev;
+			node->prev = NULL;
+			node->next = NULL;
+    }
+
+    bool containsNodeWithValue(int value) {
+      // Write your code here.
+			Node1* node = head;
+			while (node != NULL){
+				if (node->value == value) return true;
+				node = node->next;
+			}
+			return false;
+    }
+
+};
+// binary search
+int helper(vector<int> array, int start, int end,int target);
+int binarySearch(vector<int> array, int target) {
+  // Write your code here.
+	// recursive time = O(logn) space = O(1)
+	return helper(array, 0, array.size()-1, target);
+}
+
+int helper(vector<int> array, int start, int end,int target)
+{
+	int mid = (start+end)/2;
+	if (array[mid] == target) return mid;
+	else if (array[mid] < target){
+		return helper(array, mid+1, end, target);
+	}else {
+		return helper(array, 0, mid-1, target);
+	}
+}
+//////////start of all sorting
+// bubble sort time = O(n^2), space = O(1)
+vector<int> bubbleSort(vector<int>& array) {
+  // Write your code here.
+    bool inorder = false;
+	 while(!inorder){
+        inorder = true;
+	    for (int i=0; i<array.size()-1; i++){
+	    	if (array[i] > array[i+1]){
+	    		int temp = array[i];
+	    		array[i] = array[i+1];
+	    		array[i+1] = temp;
+	    	    inorder = false;	
+	    	}	
+	    }
+    }
+    return array;
+}
+
+// selection sort time O(n^2)| space O (1)
+void swap(int i, int j, vector<int>& array)
+{
+	int temp = array [i];
+	array[i] = array[j];
+	array[j] = temp;
+}
+
+vector<int> selectionSort(vector<int> array) {
+  // Write your code here.
+	if (array.empty()){
+		return {};
+	}
+	int currentidx =0;
+	while(currentidx < array.size()-1){
+		int smallestidx = currentidx;
+		for(int i = currentidx +1; i < array.size(); i++ ){
+			if(array[i] < array[smallestidx]){
+				smallestidx = i;
+			}
+		}
+		swap(currentidx, smallestidx, array);
+		currentidx ++;
+	}
+	return array;
+}
+//insertion sort time O(n^2)|space O(1)
+vector<int> insertionSort(vector<int> array) {
+  // Write your code here.
+	for (int i = 1; i < array.size(); i ++){
+		int j = i;
+		while(j > 0 && (array[j] < array[j-1])){
+				swap(j, j-1, array);
+				j --;
+		}
+	}
+	return array;
+}
+
+//////////////////////end of all sorting
+#if 0
+bool isPalindrome(string str) {
+  // Write your code here.
+	vector<char> reversestr = {};
+	for (int i = str.length()-1; i>=0; i--){
+		reversestr.push_back(str[i]);
+	}
+	return str == string(reversestr.begin(), reversestr.end());
+}
+// O(n) time | O(n) space
+bool helper(int start, int end, string& str)
+{
+	if (start >= end) return true;
+	else if (str[start] != str[end]){
+		return false;
+	}
+	else {
+		return helper(start+1, end-1, str);
+	}
+}
+
+bool isPalindrome(string str) 
+{
+	int first = 0;
+	int last = str.length()-1;
+	return helper(first, last, str);
+}
+#endif
+// O(n) time| O(1) space
+bool isPalindrome(string str) 
+{
+	int first = 0;
+	int last = str.length()-1;
+	while (first < last){
+		if (str[first] != str[last]){
+			return false;
+		}
+		first ++;
+		last --;
+	}
+	return true;
+}	
+
+// important unicode number
+// 0-9 48-57
+//A-Z  65 - 90
+//a-z  97-122
+char getnewletter(char letter, int key)
+{
+	int newletterunicode = letter + key;
+	if (newletterunicode <= 'z'){
+		return newletterunicode;
+	}
+	else {
+		return ('a'-1) + newletterunicode % 'z';
+	}
+}
+
+string caesarCypherEncryptor(string str, int key) {
+  // Write your code here.
+	int newkey = key % 26;
+	vector<char> newstr={};
+	for (int i =0; i < str.length(); i++){
+		newstr.push_back(getnewletter(str[i], newkey));
+	}
+	return string(newstr.begin(), newstr.end());	
+}
+
+// time O(n) |space O(n)
+vector<vector<int>> twoNumberSum(vector<int> array, int targetSum) {
+  // Write your code here.
+	unordered_map<int, int> cache;
+	vector<vector<int>> result {};
+    vector<int> i;
+	int len = array.size();
+	for (int num : array){
+		int reminder = abs(targetSum - num);
+		if(cache.find(reminder) != cache.end()){
+			i.push_back (num);
+			i.push_back(reminder);
+			result.push_back(i);
+		}
+		cache.insert({num, 1});
+	}
+	return result;
+}
+// time O(n) |space O(1)
+vector<vector<int> > threeNumberSum(vector<int> array, int targetSum) {
+  // Write your code here.
+	//create result triplet array
+	vector<vector<int>> triplet = {};
+	//sort array to ascending order
+	sort(array.begin(), array.end());
+	for (int i =0; i < array.size()-2; i++){
+		int left = i+1;
+		int right = array.size()-1;
+		// left cross right means all array has been checked. 
+		while (left < right){
+			int threesum = array[i] + array[left] + array[right];
+			if (threesum == targetSum){
+				triplet.push_back({array[i],array[left],array[right]});
+				left ++;
+				right --;
+			}
+			else if (threesum < targetSum){
+				left ++;
+			}
+			else {
+				right --;
+			}
+		}
+	}
+	return triplet;
+}
+//foursum
+//time O(n^2) | space O(n^2)
+vector<vector<int>> foursum(vector<int> array, int target)
+{
+    //return value
+    vector<vector<int>> quadruplets {};
+    //a unordered-map
+    unordered_map<int, vector<vector<int>>> allpairsum;
+    for(int i = 1; i<array.size() -1; i ++){
+        for(int j = i+1; j<array.size(); j++){
+            int bigP = array[i] + array[j];
+            int diff = target - bigP;
+            if (allpairsum.find(diff) != allpairsum.end()){
+                // found the complement in unordered_map
+                // push array[i], array[j], and allpair into return vector
+                for(vector<int>pair: allpairsum[diff]){
+                    pair.push_back(array[i]);
+                    pair.push_back(array[j]);
+                    quadruplets.push_back(pair);
+                }
+            }
+        }
+        // insert pair of array item + array first item
+        for(int k = 0; k < i ; k++){
+            //add this is after 
+            int currentsum = array[i] + array[k];
+            //if not find this sum
+            if (allpairsum.find(currentsum) == allpairsum.end()){
+                // not find this key in allpairsum map, add the key and value
+                allpairsum[currentsum] = vector<vector<int>> {{array[k], array[i]}};
+            }
+            else {
+                //the key/value already in allpairsum map, add to the vector back
+                allpairsum[currentsum].push_back (vector<int> {array[k], array[i]});
+            }
+        }
+    }
+    return quadruplets;
+}
+
+//deepest first search og graph
+//array remove element
+int removeelement(int array[], int length, int element)
+{
+    int j = 0;
+    for (int i =0; i <length; i++){
+        if (array[i] == element){
+            continue;
+        }
+        array[j] = array[i];
+        j++;
+    }
+    return j;
+}
+// remove duplicate array member
+int remdup(int array[], int length)
+{
+    int i = 0;
+    int j = 0;
+    int k = 0;
+    bool duplicate = false;
+    for (i = 0; i < length; i++){
+        //find if array[i] has duplicate in array
+        for (j = 0; j < length; j ++){
+            if ((array[j] == array[i]) && ( i != j )){
+                duplicate = true;
+                break;
+            }
+        } 
+        if (duplicate) {
+            duplicate = false;
+            continue;
+        }
+        array[k] = array[i];
+        k ++;
+    }
+    return k;
+}
+
+int main() {
+
+//bubble sort
+vector<int> bubblearray = {8,5,2,9,5,6,3};
+bubbleSort(bubblearray);
+for(int num:bubblearray){
+    cout<<num<<",";
+}
+cout<<endl;
+// binary search
+
+cout<<binarySearch({1, 5, 23, 111}, 111)<<endl;
+
+//linklist construct
+DoublyLinkedList linkedList;
+Node1 node1(1);
+
+linkedList.setHead(&node1);
+linkedList.remove(&node1);
+//find threelargestnumber
+vector<int> input = {141,1,17,-7,-17,-27,18,541,8,7,7};
+vector<int> output;
+output = findThreeLargestNumbers(input);
+for (int num:output){
+    cout<<num<<"   ";
+}
+cout<<endl;
+
+int array1[] = {1,2,2,3,2,4};
+cout<<"array size after remove "
+    <<removeelement(array1,sizeof(array1)/sizeof(array1[0]), 2)
+    <<endl;
+cout<<"length of array after removeduplicate "
+    <<remdup(array1, sizeof(array1)/sizeof(array1[0]))
+    <<endl;
+
+Node* node = new Node("a");
+node->addChild("b");
+node->addChild("c");
+node->addChild("d");
+
+node->children[0]->addChild("e");
+cout<<node->name;
+cout<<node->children[0]->name;
+cout<<node->children[1]->name;
+cout<<node->children[2]->name;
+cout<<node->children[0]->children[0]->name<<endl;
+vector<string> nodestr {};
+node->depthFirstSearch(&nodestr);
+for(string str:nodestr){
+    cout<<str<<"    ";
+}
+cout<<endl;
+
+#if 0    
+    vector<vector<int>> matrix = {{1,0,0,1,0},
+                                  {1,0,1,0,0},
+                                  {0,0,1,0,1},
+                                  {1,0,1,0,1},
+                                  {1,0,1,1,0}};
+#endif
+    vector<vector<int>> matrix = {
+      {1, 1, 0, 0, 0, 0, 1, 1},
+      {1, 0, 1, 1, 1, 1, 0, 1},
+      {0, 1, 1, 0, 0, 0, 1, 1},
+    };
+    vector<int> river;
+    river = riverSizes(matrix);
+    printvector(river);
+    //std::unordered_map<int,int> cache({
+    //                                  {1,0},
+    //                                 {2,1}
+    //                                   });
+    std::vector<int> lasttwo = {0,1};
+    cout<<"(";
+    for (int i =1; i <= 6; i++){
+        cout<<getNthFib3(i,lasttwo)<<",";
+    }
+    cout<<")"<<endl;
+    // quick sort
+    vector<int> vec1 = {3,2,6,5,4,7};
+    quicksort(vec1, 0, vec1.size()-1);
+    printvector(vec1);
+/////start of sum functions    
+    //twosum
+    vector<vector<int>> result {};
+    result = twoNumberSum(vec1, 8);
+    cout<<"twosum of 8 ={";
+    for(vector<int> j: result){
+        cout<<"{";
+        for(int k: j){
+            cout<<k<<",";
+        }
+        cout<<"},";
+    }
+    cout<<endl;
+    //threesum
+    vector<vector<int>> threesumresult {};
+    threesumresult = threeNumberSum(vec1, 12);
+    cout<<"threesum of 12 = ";
+    for (vector<int> i: threesumresult){
+        cout<<"{";
+        for(int j: i){
+            cout<<j<<",";
+        }
+        cout<<"},";
+    }
+    cout<<endl;
+    //foursum
+    vector<int> sumarray = {7,8,5,6,-1,2,6};
+    vector<vector<int>> quadruplet {};
+    quadruplet = foursum(sumarray, 13);
+    cout<<"foursum of 13 = ";
+    for (vector<int> result: quadruplet){
+        cout<<"{";
+        for(int i: result){
+            cout<<i<<",";
+        }
+        cout<<"},";
+    }
+    cout<<endl;
+
+////endof sum functions
+
+    vector<int> bstvalue = {1,2,4,5,6};
+    BST* mybst = new BST(3);
+    BST* findbst;
+    for(int i:bstvalue){
+        mybst->insert(i);
+    }
+    mybst->printBST(0);
+    mybst->remove(3);
+    mybst->printBST(0);
+    findbst = mybst->search(5);
+    findbst->printBST(0);
+>>>>>>> 025dc3bfcd9cf19ee333e76308a7fb6ad1a248db
 
     std:unordered_map<int,int> cache ({{1,1},
                                       {2,1}});
@@ -548,6 +1283,7 @@ int main() {
         cout<<getNthFib2(i, lasttwo)<<", ";
     }
     return 0;
+<<<<<<< HEAD
     singleton* sin;
     cout<<"0x"<<hex<<(uintptr_t)sin->getInstance()<<endl;
     singleton* sin1;
@@ -574,6 +1310,9 @@ int main() {
     integerTree->display(integerTree->root);
     //cout<<hex<<(uintptr_t)sin2->getInstance()<<endl;    
 
+=======
+    
+>>>>>>> 025dc3bfcd9cf19ee333e76308a7fb6ad1a248db
     // add two students to a linklist
     
     unique_ptr<LinkList<student>> class18 (new LinkList<student>());
