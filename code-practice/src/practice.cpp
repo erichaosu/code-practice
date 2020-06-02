@@ -16,6 +16,7 @@
 #include <algorithm>
 #include "../include/practice.h"
 using namespace std;
+#define hello 1
 
 singleton* singleton::instance = NULL;
 class solution{
